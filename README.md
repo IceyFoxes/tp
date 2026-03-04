@@ -6,7 +6,7 @@
 * It is a specialised evolution of the AddressBook Level 3 (AB3) project, tailored for covert operations and high-pressure environments.
 
 * Key Features 
-  * Stealth Facade (Lock/Unlock): Features a panic button (lock command) that instantly swaps the sensitive UI with a harmless, functional dummy interface to deceive casual observers. 
+  * Stealth Dummy (Lock/Unlock): Features a panic button (lock command) that instantly swaps the sensitive UI with a harmless, functional dummy interface to deceive casual observers. 
   * Hidden Authentication: Transitioning back to real data is handled via a hidden password command, which masquerades as an "unknown command" to maintain the illusion of a mundane application. 
   * Optimized for CLI: Designed for users who can type fast. 
   * Robust Data Management: Supports adding, deleting, listing and advanced searching of contacts with strict validation to ensure data integrity. 
