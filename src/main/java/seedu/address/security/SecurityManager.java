@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.FileUtil;
 import seedu.address.logic.Logic;
+import seedu.address.security.util.PasswordUtil;
 import seedu.address.ui.PasswordWindow;
 
 /**
@@ -62,9 +63,12 @@ public class SecurityManager implements Security {
         Optional<String> result = passwordWindow.getPassword();
         if (result.isPresent()) {
             try {
+                String hashedPassword = PasswordUtil.hashPassword(result.get());
+
                 FileUtil.createParentDirsOfFile(PASSWORD_FILE_PATH);
-                FileUtil.writeToFile(PASSWORD_FILE_PATH, result.get());
-                logger.info("Security setup complete: Password saved to " + PASSWORD_FILE_PATH);
+                FileUtil.writeToFile(PASSWORD_FILE_PATH, hashedPassword);
+
+                logger.info("Security setup complete: Password saved.");
                 return true;
             } catch (IOException e) {
                 logger.severe("Security setup failed: Could not save password file. " + e.getMessage());
