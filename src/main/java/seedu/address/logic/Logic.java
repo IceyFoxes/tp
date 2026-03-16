@@ -65,4 +65,9 @@ public interface Logic {
      * Saves the address book.
      */
     void saveAddressBook() throws IOException;
+
+    /**
+     * Returns the current app mode.
+     */
+    AppMode getCurrentMode();
 }

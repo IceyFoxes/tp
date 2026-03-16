@@ -31,8 +31,8 @@ public class MainWindow extends UiPart<Stage> {
     private Stage primaryStage;
     private Logic logic;
 
-    // Current operating mode of the app, defaults to LOCKED on startup
-    private AppMode currentMode = AppMode.LOCKED;
+    // Current operating mode of the app.
+    private AppMode currentMode;
 
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
@@ -67,6 +67,8 @@ public class MainWindow extends UiPart<Stage> {
         // Configure the UI
         setWindowDefaultSize(logic.getGuiSettings());
         setAccelerators();
+
+        currentMode = logic.getCurrentMode();
 
         helpWindow = new HelpWindow();
     }
