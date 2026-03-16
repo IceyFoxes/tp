@@ -60,12 +60,19 @@ public class SecurityManager implements Security {
     public boolean isAuthenticated() {
         String storedPassword = logic.getAddressBookPassword();
 
-        if (storedPassword != null && !storedPassword.isEmpty()) {
-            logger.info("Authentication successful: Password found in address book data.");
+        if (storedPassword != null && !storedPassword.isEmpty()
+                && PasswordUtil.isValidPassword(storedPassword)) {
+
+            logger.info("Valid password detected. Proceeding to authentication.");
             return true;
         }
 
-        logger.info("Authentication required: No password found. Starting first-time setup.");
+        if (storedPassword != null && !storedPassword.isEmpty()) {
+            logger.warning("Invalid password detected in data file. Prompting for reset.");
+        } else {
+            logger.info("No password found. Starting first-time setup.");
+        }
+
         return showPasswordSetupDialog();
     }
 

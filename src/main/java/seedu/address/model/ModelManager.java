@@ -120,8 +120,8 @@ public class ModelManager implements Model {
 
     @Override
     public void setAddressBookPassword(String password) {
-        requireNonNull(password);
-        addressBook.setPassword(password);
+        String sanitizedPassword = (password != null) ? password : "";
+        addressBook.setPassword(sanitizedPassword);
     }
 
     //=========== Filtered Person List Accessors =============================================================

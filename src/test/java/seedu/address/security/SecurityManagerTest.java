@@ -2,7 +2,6 @@ package seedu.address.security;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
@@ -54,8 +53,16 @@ public class SecurityManagerTest {
     }
 
     @Test
-    public void constructor_production_isNotNull() {
-        assertNotNull(new SecurityManager(new LogicStub()));
+    public void isAuthenticated_invalidStoredPassword_promptsForSetup() {
+        LogicStub logicStub = new LogicStub();
+        logicStub.setAddressBookPassword("password with spaces");
+
+        String newValidPassword = "newValidPassword123";
+        SecurityManager securityManager =
+                new SecurityManager(logicStub, () -> Optional.of(newValidPassword));
+
+        assertTrue(securityManager.isAuthenticated());
+        assertEquals(newValidPassword, logicStub.getAddressBookPassword());
     }
 
     /**

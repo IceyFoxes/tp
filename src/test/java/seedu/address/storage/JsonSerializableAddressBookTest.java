@@ -5,6 +5,7 @@ import static seedu.address.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -45,6 +46,40 @@ public class JsonSerializableAddressBookTest {
                 JsonSerializableAddressBook.class).get();
         assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_PERSON,
                 dataFromFile::toModelType);
+    }
+
+    @Test
+    public void toModelType_fileMissingPassword_success() throws Exception {
+        JsonSerializableAddressBook data = new JsonSerializableAddressBook(
+                TypicalPersons.getTypicalPersons().stream()
+                        .map(JsonAdaptedPerson::new)
+                        .collect(Collectors.toList()),
+                null);
+
+        AddressBook addressBook = data.toModelType();
+
+        assertEquals("", addressBook.getPassword());
+        assertEquals(TypicalPersons.getTypicalAddressBook().getPersonList(), addressBook.getPersonList());
+    }
+
+    @Test
+    public void constructor_sourceAddressBook_copiesPassword() throws IllegalValueException {
+        AddressBook source = new AddressBook();
+        source.setPassword("secret_pw_123");
+
+        JsonSerializableAddressBook serializable = new JsonSerializableAddressBook(source);
+
+        assertEquals("secret_pw_123", serializable.toModelType().getPassword());
+    }
+
+    @Test
+    public void toModelType_emptyPasswordFile_success() throws Exception {
+        Path file = TEST_DATA_FOLDER.resolve("emptyPasswordAddressBook.json");
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(file,
+                JsonSerializableAddressBook.class).get();
+
+        AddressBook addressBookFromFile = dataFromFile.toModelType();
+        assertEquals("", addressBookFromFile.getPassword());
     }
 
 }
