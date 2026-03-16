@@ -111,6 +111,19 @@ public class ModelManager implements Model {
         addressBook.setPerson(target, editedPerson);
     }
 
+    //=========== Password ===================================================================================
+
+    @Override
+    public String getAddressBookPassword() {
+        return addressBook.getPassword();
+    }
+
+    @Override
+    public void setAddressBookPassword(String password) {
+        requireNonNull(password);
+        addressBook.setPassword(password);
+    }
+
     //=========== Filtered Person List Accessors =============================================================
 
     /**
