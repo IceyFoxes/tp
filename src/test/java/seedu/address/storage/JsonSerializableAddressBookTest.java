@@ -5,6 +5,7 @@ import static seedu.address.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -80,6 +81,15 @@ public class JsonSerializableAddressBookTest {
 
         AddressBook addressBookFromFile = dataFromFile.toModelType();
         assertEquals("", addressBookFromFile.getPassword());
+    }
+
+    @Test
+    public void toModelType_nullPassword_setsEmptyString() throws Exception {
+        JsonSerializableAddressBook data = new JsonSerializableAddressBook(new ArrayList<>(), null);
+
+        AddressBook addressBook = data.toModelType();
+
+        assertEquals("", addressBook.getPassword());
     }
 
 }
