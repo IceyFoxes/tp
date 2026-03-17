@@ -37,7 +37,7 @@ public class CommandRegistry {
          * @return the created command
          * @throws ParseException if the arguments are invalid
          */
-        Command create(String arguments) throws ParseException;
+        Command create(String arguments, AppMode mode) throws ParseException;
     }
 
     /**
@@ -67,38 +67,38 @@ public class CommandRegistry {
     public CommandRegistry() {
         // Core CRUD and query commands.
         register(AddCommand.COMMAND_WORD,
-                arguments -> new AddCommandParser().parse(arguments),
+                (args, mode) -> new AddCommandParser().parse(args),
                 true, true);
         register(EditCommand.COMMAND_WORD,
-                arguments -> new EditCommandParser().parse(arguments),
+                (args, mode) -> new EditCommandParser().parse(args),
                 true, true);
         register(DeleteCommand.COMMAND_WORD,
-                arguments -> new DeleteCommandParser().parse(arguments),
+                (args, mode) -> new DeleteCommandParser().parse(args),
                 true, true);
         register(ClearCommand.COMMAND_WORD,
-                arguments -> new ClearCommand(),
+                (args, mode) -> new ClearCommand(),
                 true, true);
         register(FindCommand.COMMAND_WORD,
-                arguments -> new FindCommandParser().parse(arguments),
+                (args, mode) -> new FindCommandParser().parse(args),
                 true, true);
         register(ListCommand.COMMAND_WORD,
-                arguments -> new ListCommand(),
+                (args, mode) -> new ListCommand(),
                 true, true);
 
         // Utility commands.
         register(ExitCommand.COMMAND_WORD,
-                arguments -> new ExitCommand(),
+                (args, mode) -> new ExitCommand(),
                 true, true);
         register(HelpCommand.COMMAND_WORD,
-                arguments -> new HelpCommand(),
+                (args, mode) -> new HelpCommand(),
                 true, true);
 
         // Mode transition commands.
         register(LockCommand.COMMAND_WORD,
-                arguments -> new LockCommand(),
+                (args, mode) -> new LockCommand(),
                 false, true);
         register(UnlockCommand.COMMAND_WORD,
-                arguments -> new UnlockCommand(),
+                (args, mode) -> new UnlockCommandParser().parse(args, mode),
                 true, true);
     }
 
@@ -122,8 +122,7 @@ public class CommandRegistry {
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
         }
 
-        // Delegate to the registered factory to create the command object.
-        return registration.factory.create(arguments);
+        return registration.factory.create(arguments, mode);
     }
 
     /**
