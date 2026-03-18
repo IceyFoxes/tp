@@ -26,16 +26,20 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
+1. On your first launch, you will be prompted to set a password. Enter a password to secure your AddressBook.
+
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+   * `list` : Lists all contacts in the current mode.
 
    * `add -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
-   * `clear` : Deletes all contacts.
+   * `unlock PASSWORD` : Unlocks the app to access additional contacts.
+
+   * `lock` : Locks the app to display only a limited set of contacts.
 
    * `exit` : Exits the app.
 
@@ -66,6 +70,21 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
+
+### App Modes: Locked and Unlocked
+
+AddressBook has two distinct modes:
+
+* **Locked Mode**: A restricted view that displays a limited set of contacts. Use this mode for privacy and security.
+* **Unlocked Mode**: Displays the list of contacts added during unlocked mode in your AddressBook. Access this mode with the correct password.
+
+Each mode maintains its own separate list of persons. Contacts added in Locked mode will only appear in Locked mode, and contacts added in Unlocked mode will only appear in Unlocked mode.
+
+When you first launch the app, it starts in **Locked mode**. After password setup, use the `unlock` command with your password to switch to Unlocked mode.
+
+### Command History Display
+
+The Command Display panel keeps a history of past command results.
 
 ### Viewing help : `help`
 
@@ -152,6 +171,27 @@ Clears all entries from the address book.
 
 Format: `clear`
 
+### Locking the app : `lock`
+
+Locks the app and switches to Locked mode, displaying only the contacts in the Locked mode list.
+
+Format: `lock`
+
+Example:
+* `lock` : Locks the app and displays the limited contact list.
+
+### Unlocking the app : `unlock`
+
+Unlocks the app and switches to Unlocked mode by verifying your password. This command displays the list of contacts in the Unlocked mode list.
+
+Format: `unlock PASSWORD`
+
+* You must provide the correct password that was set during the initial setup.
+* If the password is incorrect, the app will remain locked.
+
+Examples:
+* `unlock mySecurePassword123` : Unlocks the app with the provided password.
+
 ### Exiting the program : `exit`
 
 Exits the program.
@@ -203,4 +243,6 @@ Action     | Format, Examples
 **Edit**   | `edit INDEX [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List**   | `list`
+**Lock**   | `lock`
+**Unlock** | `unlock PASSWORD`<br> e.g., `unlock mySecurePassword123`
 **Help**   | `help`
