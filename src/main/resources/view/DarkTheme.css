@@ -158,26 +158,28 @@
 .list-cell {
     -fx-label-padding: 0 0 0 0;
     -fx-graphic-text-gap : 0;
-    -fx-padding: 0 0 0 0;
+    -fx-padding: 4 0 4 0;
 }
 
-/* Applies to even-numbered filled rows in the ListView. */
-.list-cell:filled:even {
-    -fx-background-color: -app-row-even;
-}
-
-/* Applies to odd-numbered filled rows in the ListView. */
-.list-cell:filled:odd {
-    -fx-background-color: -app-row-odd;
+/* Applies to all filled rows in the ListView (odd/even unified). */
+.list-cell:filled {
+    -fx-background-color: transparent;
 }
 
 /* Applies to selected rows in the ListView. */
 .list-cell:filled:selected {
-    -fx-background-color: -app-row-selected;
+    -fx-background-color: transparent;
+}
+
+/* Applies to focused selected rows; keep cell transparent to avoid square background behind rounded cards. */
+.list-cell:filled:focused:selected,
+.list-view:focused .list-cell:filled:selected {
+    -fx-background-color: transparent;
 }
 
 /* Applies to #cardPane when its parent ListCell is selected. */
 .list-cell:filled:selected #cardPane {
+    -fx-background-color: -app-row-selected;
     -fx-border-color: -app-accent;
     -fx-border-width: 1;
 }
@@ -422,8 +424,11 @@
 
 /* Applies to id="cardPane" root in PersonListCard.fxml. */
 #cardPane {
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
+    -fx-background-color: -app-surface-alt;
+    -fx-border-width: 1;
+    -fx-border-color: -app-border;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
 }
 
 /* Unused currently (no node with id="commandTypeLabel")
