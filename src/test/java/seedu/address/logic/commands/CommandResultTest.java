@@ -35,7 +35,8 @@ public class CommandResultTest {
         assertFalse(commandResult.equals(new CommandResult("feedback", false, true)));
 
         // different requestedMode value -> returns false
-        assertFalse(commandResult.equals(new CommandResult("feedback", false, false, seedu.address.logic.AppMode.LOCKED)));
+        assertFalse(commandResult.equals(new CommandResult("feedback", false, false,
+                seedu.address.logic.AppMode.LOCKED)));
     }
 
     @Test
@@ -55,7 +56,8 @@ public class CommandResultTest {
         assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", false, true).hashCode());
 
         // different requestedMode value -> returns different hashcode
-        assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", false, false, seedu.address.logic.AppMode.LOCKED).hashCode());
+        assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", false, false,
+                seedu.address.logic.AppMode.LOCKED).hashCode());
     }
 
     @Test
