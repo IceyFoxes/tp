@@ -33,7 +33,7 @@ public class MainWindow extends UiPart<Stage> {
 
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
-    private CommandHistory commandHistory;
+    private ResultHistory resultHistory;
     private HelpWindow helpWindow;
 
     @FXML
@@ -43,7 +43,7 @@ public class MainWindow extends UiPart<Stage> {
     private StackPane personListPanelPlaceholder;
 
     @FXML
-    private StackPane commandHistoryPlaceholder;
+    private StackPane resultHistoryPlaceholder;
 
     @FXML
     private StackPane summaryPlaceholder;
@@ -83,13 +83,13 @@ public class MainWindow extends UiPart<Stage> {
          *
          * According to the bug report, TextInputControl (TextField, TextArea) will
          * consume function-key events. Because CommandBox contains a TextField, and
-         * CommandHistory contains a TextArea, thus some accelerators (e.g F1) will
+         * ResultHistory contains a TextArea, thus some accelerators (e.g F1) will
          * not work when the focus is in them because the key event is consumed by
          * the TextInputControl(s).
          *
          * For now, we add following event filter to capture such key events and open
          * help window purposely so to support accelerators even when focus is
-         * in CommandBox or CommandHistory.
+         * in CommandBox or ResultHistory.
          */
         getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getTarget() instanceof TextInputControl && keyCombination.match(event)) {
@@ -105,8 +105,8 @@ public class MainWindow extends UiPart<Stage> {
     void fillInnerParts() {
         refreshPersonListPanel();
 
-        commandHistory = new CommandHistory();
-        commandHistoryPlaceholder.getChildren().add(commandHistory.getRoot());
+        resultHistory = new ResultHistory();
+        resultHistoryPlaceholder.getChildren().add(resultHistory.getRoot());
 
         CommandBox commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
@@ -186,12 +186,12 @@ public class MainWindow extends UiPart<Stage> {
 
             // Handle mode change if requested by the command result
             commandResult.getRequestedMode().ifPresent(mode -> {
-                commandHistory.clear();
+                resultHistory.clear();
                 updateUi(mode);
             });
 
             logger.info("Result: " + commandResult.getFeedbackToUser());
-            commandHistory.setFeedbackToUser(commandResult.getFeedbackToUser());
+            resultHistory.setFeedbackToUser(commandResult.getFeedbackToUser());
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
@@ -204,7 +204,7 @@ public class MainWindow extends UiPart<Stage> {
             return commandResult;
         } catch (CommandException | ParseException e) {
             logger.info("An error occurred while executing command: " + commandText);
-            commandHistory.setFeedbackToUser(e.getMessage());
+            resultHistory.setFeedbackToUser(e.getMessage());
             throw e;
         }
     }
