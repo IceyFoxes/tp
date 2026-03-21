@@ -40,4 +40,12 @@ public class CommandHistory {
         }
         return currentIndex < history.size() ? history.get(currentIndex) : "";
     }
+
+    /**
+     * Clears the command history.
+     */
+    public void clear() {
+        history.clear();
+        currentIndex = 0;
+    }
 }

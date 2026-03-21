@@ -34,6 +34,7 @@ public class MainWindow extends UiPart<Stage> {
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
     private ResultHistory resultHistory;
+    private CommandBox commandBox;
     private HelpWindow helpWindow;
 
     @FXML
@@ -108,7 +109,7 @@ public class MainWindow extends UiPart<Stage> {
         resultHistory = new ResultHistory();
         resultHistoryPlaceholder.getChildren().add(resultHistory.getRoot());
 
-        CommandBox commandBox = new CommandBox(this::executeCommand);
+        commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
 
         // Initialise the UI to the current mode (should be LOCKED at startup)
@@ -190,6 +191,9 @@ public class MainWindow extends UiPart<Stage> {
 
             commandResult.getRequestedMode().ifPresent(mode -> {
                 resultHistory.clear();
+                if (commandBox != null) {
+                    commandBox.clearCommandHistory();
+                }
                 updateUi(mode);
             });
 

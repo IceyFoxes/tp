@@ -89,6 +89,13 @@ public class CommandBox extends UiPart<Region> {
     }
 
     /**
+     * Clears the command history.
+     */
+    public void clearCommandHistory() {
+        commandHistory.clear();
+    }
+
+    /**
      * Represents a function that can execute commands.
      */
     @FunctionalInterface
