@@ -185,13 +185,18 @@ public class MainWindow extends UiPart<Stage> {
             CommandResult commandResult = logic.execute(commandText);
 
             // Handle mode change if requested by the command result
+            boolean isModeChangedToLocked = commandResult.getRequestedMode().isPresent()
+                    && commandResult.getRequestedMode().get() == seedu.address.logic.AppMode.LOCKED;
+
             commandResult.getRequestedMode().ifPresent(mode -> {
                 resultHistory.clear();
                 updateUi(mode);
             });
 
             logger.info("Result: " + commandResult.getFeedbackToUser());
-            resultHistory.setFeedbackToUser(commandResult.getFeedbackToUser());
+            if (!isModeChangedToLocked) {
+                resultHistory.setFeedbackToUser(commandResult.getFeedbackToUser());
+            }
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
