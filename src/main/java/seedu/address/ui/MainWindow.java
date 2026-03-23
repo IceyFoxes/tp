@@ -110,51 +110,41 @@ public class MainWindow extends UiPart<Stage> {
 
         updateUi(logic.getCurrentMode());
 
-        // Handle Navigation FROM Command Box
-        configureCommandBoxNavigation();
-
-        // Handle Navigation FROM Person List
-        configurePersonListNavigation();
+        installTabCycleFilter();
     }
 
     /**
-     * Configures navigation from the Command Box.
-     * Tab -> First item in list.
-     * Shift+Tab -> Last item in list.
+     * Installs a global filter to cycle through person cards while keeping focus in CommandBox.
      */
-    private void configureCommandBoxNavigation() {
-        commandBox.getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+    private void installTabCycleFilter() {
+        getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.TAB) {
-                personListPanel.requestFocus();
-                if (event.isShiftDown()) {
-                    int lastIndex = personListPanel.getPersonListView().getItems().size() - 1;
-                    personListPanel.getPersonListView().getSelectionModel().select(lastIndex);
-                    personListPanel.getPersonListView().scrollTo(lastIndex);
-                } else {
-                    personListPanel.getPersonListView().getSelectionModel().selectFirst();
-                    personListPanel.getPersonListView().scrollTo(0);
-                }
+                handleTabCycle(event.isShiftDown());
                 event.consume();
             }
         });
     }
 
     /**
-     * Configures navigation from the Person List.
-     * Specifically catches Shift+Tab at the first item to jump directly to Command Box.
+     * Coordinates the selection logic between components.
      */
-    private void configurePersonListNavigation() {
-        personListPanel.getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.TAB && event.isShiftDown()) {
-                int currentIndex = personListPanel.getPersonListView().getSelectionModel().getSelectedIndex();
+    private void handleTabCycle(boolean isShiftDown) {
+        // Ensure CommandBox always focus
+        commandBox.requestFocus();
 
-                // If we are at the first item, jump straight to Command Box
-                if (currentIndex <= 0) {
-                    commandBox.requestFocus();
-                    event.consume();
-                }
+        if (isShiftDown) {
+            if (!personListPanel.isAnySelected()) {
+                personListPanel.selectLast();
+            } else {
+                personListPanel.selectPrevious();
             }
-        });
+        } else {
+            if (!personListPanel.isAnySelected()) {
+                personListPanel.selectFirst();
+            } else {
+                personListPanel.selectNext();
+            }
+        }
     }
 
     /**
