@@ -9,7 +9,8 @@ import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
 
 /**
- * Panel containing the list of persons with "Smart Scrolling" logic.
+ * Panel containing the list of persons.
+ * Implements "Smart Scrolling" and wrap-around "Snapping" to keep navigation natural.
  */
 public class PersonListPanel extends UiPart<Region> {
     private static final String FXML = "PersonListPanel.fxml";
@@ -17,76 +18,138 @@ public class PersonListPanel extends UiPart<Region> {
     @FXML
     private ListView<Person> personListView;
 
+    /**
+     * Creates a {@code PersonListPanel} with the given {@code ObservableList}.
+     *
+     * @param personList The list of persons to be displayed.
+     */
     public PersonListPanel(ObservableList<Person> personList) {
         super(FXML);
         personListView.setItems(personList);
         personListView.setCellFactory(listView -> new PersonListViewCell());
+        // Disable focus on the list itself so the CommandBox remains the primary focus owner.
         personListView.setFocusTraversable(false);
     }
 
     /**
-     * Helper to scroll only if the index is not currently visible.
+     * Nudges the scrollbar directionally only if the index is not currently visible.
+     *
+     * @param index The index to ensure visibility for.
+     * @param isMovingDown True if navigating forward (bottom-align), false if backward (top-align).
      */
-    private void scrollToVisible(int index) {
-        // Find VirtualFlow (internal part of ListView)
+    private void scrollToVisible(int index, boolean isMovingDown) {
         VirtualFlow<?> flow = (VirtualFlow<?>) personListView.lookup(".virtual-flow");
-        if (flow == null) {
-            personListView.scrollTo(index); // Fallback
+
+        if (flow == null || flow.getFirstVisibleCell() == null || flow.getLastVisibleCell() == null) {
+            personListView.scrollTo(index);
             return;
         }
 
         int firstIndex = flow.getFirstVisibleCell().getIndex();
         int lastIndex = flow.getLastVisibleCell().getIndex();
 
-        if (index <= firstIndex || index >= lastIndex) {
-            personListView.scrollTo(index);
+        if (isMovingDown) {
+            // TAB: If the card is below the current viewport, nudge so it appears at the bottom
+            if (index >= lastIndex) {
+                int visibleRange = lastIndex - firstIndex;
+                int scrollTarget = Math.max(0, index - visibleRange + 1);
+                personListView.scrollTo(scrollTarget);
+            }
+        } else {
+            // SHIFT+TAB: If the card is above the current viewport, align it to the top
+            if (index <= firstIndex) {
+                personListView.scrollTo(index);
+            }
         }
-        // If index is between first and last, do nothing
     }
 
+    /**
+     * Selects the next person in the list.
+     * If at the end of the list, wraps around and snaps the scrollbar back to the top.
+     */
     public void selectNext() {
         int size = personListView.getItems().size();
-        if (size == 0) return;
+        if (size == 0) {
+            return;
+        }
 
         int currentIndex = personListView.getSelectionModel().getSelectedIndex();
         int nextIndex = (currentIndex + 1) % size;
 
         personListView.getSelectionModel().select(nextIndex);
-        scrollToVisible(nextIndex);
+
+        // Snap-back Logic: If we wrapped from last to first
+        if (nextIndex == 0 && currentIndex == size - 1) {
+            personListView.scrollTo(0);
+        } else {
+            scrollToVisible(nextIndex, true);
+        }
     }
 
+    /**
+     * Selects the previous person in the list.
+     * If at the start of the list, wraps around and snaps the scrollbar to the bottom.
+     */
     public void selectPrevious() {
         int size = personListView.getItems().size();
-        if (size == 0) return;
+        if (size == 0) {
+            return;
+        }
 
         int currentIndex = personListView.getSelectionModel().getSelectedIndex();
         int prevIndex = (currentIndex <= 0) ? size - 1 : currentIndex - 1;
 
         personListView.getSelectionModel().select(prevIndex);
-        scrollToVisible(prevIndex);
+
+        // If we wrapped from first to last
+        if (prevIndex == size - 1 && currentIndex == 0) {
+            scrollToVisible(prevIndex, true);
+        } else {
+            scrollToVisible(prevIndex, false);
+        }
     }
 
+    /**
+     * Selects the first person in the list and forces a scroll to the top.
+     */
     public void selectFirst() {
-        if (personListView.getItems().isEmpty()) return;
+        if (personListView.getItems().isEmpty()) {
+            return;
+        }
         personListView.getSelectionModel().selectFirst();
-        personListView.scrollTo(0); // Safe to jump to top for first item
+        personListView.scrollTo(0);
     }
 
+    /**
+     * Selects the last person in the list and forces a scroll to the bottom.
+     */
     public void selectLast() {
         int size = personListView.getItems().size();
-        if (size == 0) return;
+        if (size == 0) {
+            return;
+        }
         personListView.getSelectionModel().selectLast();
-        personListView.scrollTo(size - 1); // Safe to jump to bottom for last item
+        // Bottom align for  last item
+        scrollToVisible(size - 1, true);
     }
 
+    /**
+     * Returns true if a person is currently selected.
+     *
+     * @return True if selection exists.
+     */
     public boolean isAnySelected() {
-        return personListView.getSelectionModel().getSelectedIndex() >= 0;
+        return personListView.getSelectionModel().getSelectedIndex() < 0;
     }
 
+    /**
+     * Custom {@code ListCell} that displays the graphics of a {@code Person} using a {@code PersonCard}.
+     */
     class PersonListViewCell extends ListCell<Person> {
         @Override
         protected void updateItem(Person person, boolean empty) {
             super.updateItem(person, empty);
+
             if (empty || person == null) {
                 setGraphic(null);
                 setText(null);
