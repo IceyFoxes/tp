@@ -39,8 +39,8 @@
             <StackPane fx:id="personDetailPlaceholder"
                        VBox.vgrow="SOMETIMES"
                        styleClass="pane-with-border"
-                       minHeight="150"
-                       prefHeight="200" />
+                       minHeight="160"
+                       prefHeight="210" />
           </VBox>
 
           <VBox fx:id="rightPanel" styleClass="background" HBox.hgrow="ALWAYS">
