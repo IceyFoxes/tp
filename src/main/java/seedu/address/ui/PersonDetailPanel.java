@@ -26,6 +26,9 @@ public class PersonDetailPanel extends UiPart<Region> {
     @FXML
     private FlowPane tags;
 
+    /**
+     * Instantiates a new {@code PersonDetailPanel}.
+     */
     public PersonDetailPanel() {
         super(FXML);
         clearPerson();
