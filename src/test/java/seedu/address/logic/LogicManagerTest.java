@@ -32,6 +32,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PersonStatus;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
@@ -53,7 +54,31 @@ public class LogicManagerTest {
                 new JsonAddressBookStorage(temporaryFolder.resolve("addressBook.json"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
-        logic = new LogicManager(model, storage, new AppModeManager(AppMode.UNLOCKED));
+
+        AppModeManager modeManager = new AppModeManager(AppMode.LOCKED);
+        logic = new LogicManager(model, storage, modeManager);
+    }
+
+    @Test
+    public void execute_modeTransition_updatesLogicManagerMode() throws Exception {
+        // Initial State
+        assertEquals(AppMode.LOCKED, logic.getCurrentMode());
+
+        // Transition to UNLOCKED
+        logic.setAddressBookPassword("validPassword123");
+        logic.execute(UnlockCommand.COMMAND_WORD + " validPassword123");
+        assertEquals(AppMode.UNLOCKED, logic.getCurrentMode());
+
+        // Transition back to LOCKED
+        logic.execute(LockCommand.COMMAND_WORD);
+        assertEquals(AppMode.LOCKED, logic.getCurrentMode());
+    }
+
+    @Test
+    public void getAddressBookPassword_consistency() {
+        String password = "secretPassword";
+        logic.setAddressBookPassword(password);
+        assertEquals(password, logic.getAddressBookPassword());
     }
 
     @Test
@@ -108,6 +133,9 @@ public class LogicManagerTest {
     @Test
     public void execute_viewCommand_returnsSelectedIndexInResult() throws Exception {
         model.addPerson(AMY, AppMode.UNLOCKED);
+
+        logic.setAddressBookPassword("validPassword123");
+        logic.execute(UnlockCommand.COMMAND_WORD + " validPassword123");
 
         CommandResult result = logic.execute(ViewCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(INDEX_FIRST_PERSON, result.getSelectedIndex().orElseThrow());
@@ -193,7 +221,10 @@ public class LogicManagerTest {
         // Triggers the saveAddressBook method by executing an add command
         String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
-        Person expectedPerson = new PersonBuilder(AMY).withTags().build();
+        Person expectedPerson = new PersonBuilder(AMY)
+                .withTags()
+                .withStatus(PersonStatus.UNLOCKED)
+                .build();
         ModelManager expectedModel = new ModelManager();
         expectedModel.addPerson(expectedPerson, AppMode.UNLOCKED);
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
