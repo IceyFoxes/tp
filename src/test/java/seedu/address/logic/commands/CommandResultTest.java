@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import org.junit.jupiter.api.Test;
 
@@ -37,6 +38,9 @@ public class CommandResultTest {
         // different requestedMode value -> returns false
         assertFalse(commandResult.equals(new CommandResult("feedback", false, false,
                 seedu.address.logic.AppMode.LOCKED)));
+
+        // different selectedIndex value -> returns false
+        assertFalse(commandResult.equals(new CommandResult("feedback", INDEX_FIRST_PERSON)));
     }
 
     @Test
@@ -58,6 +62,9 @@ public class CommandResultTest {
         // different requestedMode value -> returns different hashcode
         assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", false, false,
                 seedu.address.logic.AppMode.LOCKED).hashCode());
+
+        // different selectedIndex value -> returns different hashcode
+        assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", INDEX_FIRST_PERSON).hashCode());
     }
 
     @Test
@@ -66,7 +73,8 @@ public class CommandResultTest {
         String expected = CommandResult.class.getCanonicalName() + "{feedbackToUser="
                 + commandResult.getFeedbackToUser() + ", showHelp=" + commandResult.isShowHelp()
                 + ", exit=" + commandResult.isExit()
-                + ", requestedMode=" + commandResult.getRequestedMode().orElse(null) + "}";
+                + ", requestedMode=" + commandResult.getRequestedMode().orElse(null)
+                + ", selectedIndex=" + commandResult.getSelectedIndex().orElse(null) + "}";
         assertEquals(expected, commandResult.toString());
     }
 }
