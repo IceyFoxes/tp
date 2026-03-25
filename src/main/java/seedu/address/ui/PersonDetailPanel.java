@@ -47,6 +47,9 @@ public class PersonDetailPanel extends UiPart<Region> {
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
     }
 
+    /**
+     * Clears the person details from the panel.
+     */
     public void clearPerson() {
         name.setText("Select a person to view details");
         phone.setText("");
