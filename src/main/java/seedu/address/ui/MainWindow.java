@@ -160,7 +160,7 @@ public class MainWindow extends UiPart<Stage> {
         boolean isLocked = mode == AppMode.LOCKED;
         primaryStage.setTitle(isLocked ? "AddressBook" : "Spyglass");
         refreshPersonListPanel();
-        personDetailPanel.setPerson(null);
+        personDetailPanel.clearPerson();
     }
 
     void show() {

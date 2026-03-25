@@ -35,10 +35,7 @@ public class PersonDetailPanel extends UiPart<Region> {
     }
 
     public void setPerson(Person person) {
-        if (person == null) {
-            clearPerson();
-            return;
-        }
+        assert person != null;
 
         name.setText(person.getName().fullName);
         phone.setText(person.getPhone().value);
@@ -50,7 +47,7 @@ public class PersonDetailPanel extends UiPart<Region> {
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
     }
 
-    private void clearPerson() {
+    public void clearPerson() {
         name.setText("Select a person to view details");
         phone.setText("");
         address.setText("");
