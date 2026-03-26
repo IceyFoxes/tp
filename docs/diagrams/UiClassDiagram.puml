@@ -15,6 +15,7 @@ Class PersonListPanel
 Class PersonCard
 Class PersonDetailPanel
 Class CommandBox
+Class SetupPanel
 }
 
 package Model <<Rectangle>> {
@@ -23,6 +24,10 @@ Class HiddenModel #FFFFFF
 
 package Logic <<Rectangle>> {
 Class HiddenLogic #FFFFFF
+}
+
+package Security <<Rectangle>> {
+Class HiddenSecurity #FFFFFF
 }
 
 Class HiddenOutside #FFFFFF
@@ -35,6 +40,7 @@ MainWindow *-down-> "1" ResultHistory
 MainWindow *-down-> "1" PersonListPanel
 MainWindow *-down-> "1" PersonDetailPanel
 MainWindow --> "0..1" HelpWindow
+MainWindow --> "0..1" SetupPanel
 
 PersonListPanel -down-> "*" PersonCard
 
@@ -46,11 +52,14 @@ PersonListPanel --|> UiPart
 PersonCard --|> UiPart
 PersonDetailPanel --|> UiPart
 HelpWindow --|> UiPart
+SetupPanel --|> UiPart
 
 PersonCard ..> Model
 PersonDetailPanel ..> Model
 UiManager -right-> Logic
 MainWindow -left-> Logic
+UiManager -up-> Security
+MainWindow -right-> Security
 
 PersonListPanel -[hidden]left- HelpWindow
 HelpWindow -[hidden]left- CommandBox
