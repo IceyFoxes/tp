@@ -39,8 +39,8 @@ MainWindow *-down->  "1" CommandBox
 MainWindow *-down-> "1" ResultHistory
 MainWindow *-down-> "1" PersonListPanel
 MainWindow *-down-> "1" PersonDetailPanel
-MainWindow -down-> "0..1" HelpWindow
-MainWindow -down-> "0..1" SetupPanel
+MainWindow *-down-> "1" HelpWindow
+MainWindow *-down-> "1" SetupPanel
 
 PersonListPanel -down-> "*" PersonCard
 
