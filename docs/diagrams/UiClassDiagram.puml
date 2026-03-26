@@ -39,8 +39,8 @@ MainWindow *-down->  "1" CommandBox
 MainWindow *-down-> "1" ResultHistory
 MainWindow *-down-> "1" PersonListPanel
 MainWindow *-down-> "1" PersonDetailPanel
-MainWindow --> "0..1" HelpWindow
-MainWindow --> "0..1" SetupPanel
+MainWindow -down-> "0..1" HelpWindow
+MainWindow -down-> "0..1" SetupPanel
 
 PersonListPanel -down-> "*" PersonCard
 
@@ -61,9 +61,11 @@ MainWindow -left-> Logic
 UiManager -up-> Security
 MainWindow -right-> Security
 
-PersonListPanel -[hidden]left- HelpWindow
-HelpWindow -[hidden]left- CommandBox
+PersonDetailPanel -[hidden]left- PersonListPanel
+PersonListPanel -[hidden]left- CommandBox
 CommandBox -[hidden]left- ResultHistory
+HelpWindow -[hidden]left- PersonDetailPanel
+SetupPanel -[hidden]left- HelpWindow
 
 MainWindow -[hidden]-|> UiPart
 @enduml
