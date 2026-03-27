@@ -40,7 +40,6 @@ public class MainWindow extends UiPart<Stage> {
     private ResultHistory resultHistory;
     private PersonDetailPanel personDetailPanel;
     private CommandBox commandBox;
-    private HelpWindow helpWindow;
     private SetupPanel setupPanel;
 
     // Caches the dashboard layout to allow switching back after setup
@@ -75,8 +74,6 @@ public class MainWindow extends UiPart<Stage> {
 
         // Configure the UI
         setWindowDefaultSize(logic.getGuiSettings());
-
-        helpWindow = new HelpWindow();
     }
 
     public Stage getPrimaryStage() {
@@ -199,18 +196,6 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Opens the help window or focuses on it if it's already opened.
-     */
-    @FXML
-    public void handleHelp() {
-        if (!helpWindow.isShowing()) {
-            helpWindow.show();
-        } else {
-            helpWindow.focus();
-        }
-    }
-
-    /**
      * Updates the UI according to the current mode.
      */
     private void updateUi(AppMode mode) {
@@ -232,7 +217,6 @@ public class MainWindow extends UiPart<Stage> {
         GuiSettings guiSettings = new GuiSettings(primaryStage.getWidth(), primaryStage.getHeight(),
                 (int) primaryStage.getX(), (int) primaryStage.getY());
         logic.setGuiSettings(guiSettings);
-        helpWindow.hide();
         primaryStage.hide();
     }
 
@@ -302,10 +286,6 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("Result: " + commandResult.getFeedbackToUser());
             if (isModeChangedToUnlocked) {
                 resultHistory.setFeedbackToUser(commandResult.getFeedbackToUser());
-            }
-
-            if (commandResult.isShowHelp()) {
-                handleHelp();
             }
 
             if (commandResult.isExit()) {
