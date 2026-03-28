@@ -20,11 +20,13 @@ public class HelpCommand extends Command {
             + "Example: " + COMMAND_WORD + " add";
 
     public static final String MESSAGE_UNKNOWN_MANUAL = "No command '%1$s'.";
-    public static final String GENERAL_MANUAL_LOCKED = "Welcome to AddressBook. Below are the commands available in this application.\n"
+    public static final String GENERAL_MANUAL_LOCKED = "Welcome to AddressBook. "
+        + "Below are the commands available in this application.\n"
         + "Usage: help [COMMAND] to view more details\n"
         + "Commands: add, edit, delete, clear, find, list, view, exit, help\n"
         + "Example: help help | help add";
-    public static final String GENERAL_MANUAL_UNLOCKED = "Welcome to Spyglass. Below are the commands available in this application.\n"
+    public static final String GENERAL_MANUAL_UNLOCKED = "Welcome to Spyglass. "
+        + "Below are the commands available in this application.\n"
         + "Usage: help [COMMAND] to view more details\n"
         + "Commands: add, edit, delete, clear, find, list, view, lock, unlock, setup, exit, help\n"
         + "Example: help help | help lock";
