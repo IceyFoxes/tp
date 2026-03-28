@@ -57,6 +57,8 @@ public class PersonDetailPanel extends UiPart<Region> {
 
     /**
      * Updates the internal mode and toggles visibility of restricted fields.
+     *
+     * @param mode The current {@code AppMode} of the application.
      */
     public void updateMode(AppMode mode) {
         this.currentMode = mode;
