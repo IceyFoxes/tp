@@ -17,9 +17,9 @@ public class HelpCommandTest {
     private Model expectedModel = new ModelManager();
 
     private static String expectedManual(String purpose, String usage, String example) {
-        return "PURPOSE: " + purpose + "\n"
-                + "USAGE: " + usage + "\n"
-                + "EXAMPLE: " + example;
+        return "Purpose: " + purpose + "\n"
+            + "Usage: " + usage + "\n"
+            + "Example: " + example;
     }
 
     @Test
@@ -67,9 +67,9 @@ public class HelpCommandTest {
             CommandResult commandResult = new HelpCommand(command)
                     .execute(new CommandContext(model, AppMode.LOCKED));
             String feedback = commandResult.getFeedbackToUser();
-            assertTrue(feedback.startsWith("PURPOSE:"));
-            assertTrue(feedback.contains("\nUSAGE:"));
-            assertTrue(feedback.contains("\nEXAMPLE:"));
+            assertTrue(feedback.startsWith("Purpose:"));
+            assertTrue(feedback.contains("\nUsage:"));
+            assertTrue(feedback.contains("\nExample:"));
         }
     }
 
@@ -83,9 +83,9 @@ public class HelpCommandTest {
             CommandResult commandResult = new HelpCommand(command)
                     .execute(new CommandContext(model, AppMode.UNLOCKED));
             String feedback = commandResult.getFeedbackToUser();
-            assertTrue(feedback.startsWith("PURPOSE:"));
-            assertTrue(feedback.contains("\nUSAGE:"));
-            assertTrue(feedback.contains("\nEXAMPLE:"));
+            assertTrue(feedback.startsWith("Purpose:"));
+            assertTrue(feedback.contains("\nUsage:"));
+            assertTrue(feedback.contains("\nExample:"));
         }
     }
 

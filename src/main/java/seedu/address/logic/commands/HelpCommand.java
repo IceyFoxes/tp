@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Locale;
 import java.util.Objects;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -21,14 +20,14 @@ public class HelpCommand extends Command {
             + "Example: " + COMMAND_WORD + " add";
 
     public static final String MESSAGE_UNKNOWN_MANUAL = "No command '%1$s'.";
-    public static final String GENERAL_MANUAL_LOCKED = "PURPOSE: show command manuals\n"
-        + "USAGE: help [COMMAND]\n"
-        + "COMMANDS: add, edit, delete, clear, find, list, view, exit, help\n"
-        + "EXAMPLE: help | help add";
-    public static final String GENERAL_MANUAL_UNLOCKED = "PURPOSE: show command manuals\n"
-        + "USAGE: help [COMMAND]\n"
-        + "COMMANDS: add, edit, delete, clear, find, list, view, lock, unlock, setup, exit, help\n"
-        + "EXAMPLE: help | help lock";
+    public static final String GENERAL_MANUAL_LOCKED = "Welcome to AddressBook. Below are the commands available in this application.\n"
+        + "Usage: help [COMMAND] to view more details\n"
+        + "Commands: add, edit, delete, clear, find, list, view, exit, help\n"
+        + "Example: help help | help add";
+    public static final String GENERAL_MANUAL_UNLOCKED = "Welcome to Spyglass. Below are the commands available in this application.\n"
+        + "Usage: help [COMMAND] to view more details\n"
+        + "Commands: add, edit, delete, clear, find, list, view, lock, unlock, setup, exit, help\n"
+        + "Example: help help | help lock";
 
     private final String targetCommand;
 
@@ -40,7 +39,7 @@ public class HelpCommand extends Command {
      * Creates a HelpCommand that targets a specific command manual.
      */
     public HelpCommand(String targetCommand) {
-        this.targetCommand = targetCommand == null ? null : targetCommand.toLowerCase(Locale.ROOT);
+        this.targetCommand = targetCommand;
     }
 
     @Override
@@ -116,7 +115,7 @@ public class HelpCommand extends Command {
             return new CommandResult(buildManual(
                 "Show command manuals.",
                     "help [COMMAND]",
-                    "help\nhelp add"));
+                    "help add\nhelp edit"));
         default:
             throw new CommandException(String.format(MESSAGE_UNKNOWN_MANUAL, targetCommand));
         }
@@ -141,9 +140,9 @@ public class HelpCommand extends Command {
     }
 
     private static String buildManual(String description, String usage, String examples) {
-        return "PURPOSE: " + description + "\n"
-            + "USAGE: " + usage + "\n"
-            + "EXAMPLE: " + examples.replace("\n", " | ");
+        return "Purpose: " + description + "\n"
+            + "Usage: " + usage + "\n"
+            + "Example: " + examples.replace("\n", " | ");
     }
 
     @Override
