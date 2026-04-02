@@ -2,21 +2,28 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<ScrollPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding: 0;" styleClass="edge-to-edge">
-  <VBox alignment="TOP_LEFT" spacing="10">
-    <padding>
-      <Insets top="15" right="15" bottom="5" left="15"/>
-    </padding>
+<ScrollPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding: 0;" styleClass="edge-to-edge" minWidth="0" prefWidth="0">
+  <VBox fillWidth="true">
+    <StackPane fx:id="placeholderContainer" alignment="CENTER" VBox.vgrow="ALWAYS">
+      <Label fx:id="placeholder" styleClass="person-detail-placeholder" text="Select a person to view details" wrapText="true" />
+    </StackPane>
 
-    <Label fx:id="name" styleClass="person-detail-name" wrapText="true" />
-    <FlowPane fx:id="tags" />
-    <Label fx:id="phone" styleClass="cell_small_label" wrapText="true" />
-    <Label fx:id="address" styleClass="cell_small_label" wrapText="true" />
-    <Label fx:id="email" styleClass="cell_small_label" wrapText="true" />
-    <Label fx:id="status" styleClass="cell_small_label" visible="false" managed="false" />
+    <VBox fx:id="detailsContainer" alignment="TOP_LEFT" spacing="10" visible="false" managed="false" fillWidth="true" minWidth="0">
+      <padding>
+        <Insets top="15" right="15" bottom="5" left="15"/>
+      </padding>
+
+      <Label fx:id="name" styleClass="person-detail-name" wrapText="true" maxWidth="Infinity" />
+      <FlowPane fx:id="tags" id="tags" maxWidth="Infinity" />
+      <Label fx:id="phone" styleClass="cell_small_label" wrapText="true" maxWidth="Infinity" />
+      <Label fx:id="address" styleClass="cell_small_label" wrapText="true" maxWidth="Infinity" />
+      <Label fx:id="email" styleClass="cell_small_label" wrapText="true" maxWidth="Infinity" />
+      <Label fx:id="status" styleClass="cell_small_label" visible="false" managed="false" />
+    </VBox>
   </VBox>
 </ScrollPane>

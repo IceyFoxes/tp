@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import seedu.address.logic.AppMode;
 import seedu.address.model.person.Person;
 
@@ -17,6 +19,12 @@ public class PersonDetailPanel extends UiPart<Region> {
     private static final String FXML = "PersonDetailPanel.fxml";
     private AppMode currentMode = AppMode.LOCKED;
 
+    @FXML
+    private Label placeholder;
+    @FXML
+    private StackPane placeholderContainer;
+    @FXML
+    private VBox detailsContainer;
     @FXML
     private Label name;
     @FXML
@@ -35,12 +43,14 @@ public class PersonDetailPanel extends UiPart<Region> {
      */
     public PersonDetailPanel() {
         super(FXML);
+        tags.prefWrapLengthProperty().bind(detailsContainer.widthProperty());
         clearPerson();
     }
 
     public void setPerson(Person person) {
         assert person != null;
 
+        showPersonDetails();
         name.setText(person.getName().fullName);
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
@@ -72,11 +82,30 @@ public class PersonDetailPanel extends UiPart<Region> {
      * Clears the person details from the panel.
      */
     public void clearPerson() {
-        name.setText("Select a person to view details");
+        showPlaceholder();
+        name.setText("");
         phone.setText("");
         address.setText("");
         email.setText("");
         status.setText("");
         tags.getChildren().clear();
+    }
+
+    private void showPlaceholder() {
+        placeholder.setVisible(true);
+        placeholder.setManaged(true);
+        placeholderContainer.setVisible(true);
+        placeholderContainer.setManaged(true);
+        detailsContainer.setVisible(false);
+        detailsContainer.setManaged(false);
+    }
+
+    private void showPersonDetails() {
+        placeholder.setVisible(false);
+        placeholder.setManaged(false);
+        placeholderContainer.setVisible(false);
+        placeholderContainer.setManaged(false);
+        detailsContainer.setVisible(true);
+        detailsContainer.setManaged(true);
     }
 }

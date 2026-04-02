@@ -119,21 +119,6 @@
 }
 */
 
-/* Unused currently (no SplitPane in current FXML/Java)
-.split-pane:horizontal .split-pane-divider {
-    -fx-background-color: derive(#1d1d1d, 20%);
-    -fx-border-color: transparent transparent transparent #4d4d4d;
-}
-*/
-
-/* Unused currently (no SplitPane in current FXML/Java)
-.split-pane {
-    -fx-border-radius: 1;
-    -fx-border-width: 1;
-    -fx-background-color: derive(#1d1d1d, 20%);
-}
-*/
-
 /* Applies to ListView controls (e.g. personListView in PersonListPanel.fxml). */
 .list-view {
     -fx-background-insets: 0;
@@ -223,6 +208,15 @@
     -fx-font-family: "Segoe UI";
     -fx-text-fill: -app-text-primary;
     -fx-opacity: 1;
+}
+
+/* Applies to the centered empty-state label in PersonDetailPanel. */
+.person-detail-placeholder {
+    -fx-font-size: 15pt;
+    -fx-font-family: "Segoe UI";
+    -fx-text-fill: -app-text-muted;
+    -fx-opacity: 1;
+    -fx-text-alignment: center;
 }
 
 /* Applies to personListPanelPlaceholder host container; functional only (no visible shell). */

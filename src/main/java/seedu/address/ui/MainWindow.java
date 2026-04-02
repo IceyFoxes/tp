@@ -2,10 +2,12 @@ package seedu.address.ui;
 
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
@@ -56,6 +58,12 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane personDetailPlaceholder;
+
+    @FXML
+    private SplitPane mainSplitPane;
+
+    @FXML
+    private SplitPane leftVerticalSplitPane;
 
     /**
      * Creates a {@code MainWindow} with the given {@code Stage}, {@code Logic} and {@code Security}.
@@ -127,6 +135,11 @@ public class MainWindow extends UiPart<Stage> {
 
         commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
+
+        Platform.runLater(() -> {
+            mainSplitPane.setDividerPositions(0.5);
+            leftVerticalSplitPane.setDividerPositions(2.0 / 3.0);
+        });
 
         updateUi(logic.getCurrentMode());
 

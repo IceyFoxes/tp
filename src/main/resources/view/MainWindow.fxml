@@ -3,8 +3,8 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Scene?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -21,39 +21,42 @@
       </stylesheets>
 
       <VBox>
-        <HBox VBox.vgrow="ALWAYS">
-          <VBox fx:id="leftPanel" styleClass="background" spacing="10" minWidth="420" prefWidth="450" HBox.hgrow="NEVER">
-            <padding>
-              <Insets top="10" right="10" bottom="10" left="10" />
-            </padding>
+        <SplitPane fx:id="mainSplitPane" dividerPositions="0.5" VBox.vgrow="ALWAYS">
+          <items>
+          <VBox fx:id="leftPanel" minWidth="0.0">
+            <SplitPane fx:id="leftVerticalSplitPane" orientation="VERTICAL" dividerPositions="0.6667" VBox.vgrow="ALWAYS">
+              <items>
+                <StackPane fx:id="resultHistoryPlaceholder"
+                           minWidth="0"
+                           styleClass="pane-with-border"
+                           minHeight="320"
+                           prefHeight="420" />
 
-            <StackPane fx:id="resultHistoryPlaceholder"
-                       VBox.vgrow="ALWAYS"
-                       styleClass="pane-with-border"
-                       minHeight="320"
-                       prefHeight="420" />
-
-            <StackPane fx:id="personDetailPlaceholder"
-                       VBox.vgrow="SOMETIMES"
-                       styleClass="pane-with-border"
-                       minHeight="190"
-                       prefHeight="240" />
+                <StackPane fx:id="personDetailPlaceholder"
+                           styleClass="pane-with-border"
+                           minWidth="0"
+                           minHeight="190"
+                           prefHeight="240" />
+              </items>
+            </SplitPane>
           </VBox>
 
-          <VBox fx:id="rightPanel" styleClass="background" HBox.hgrow="ALWAYS">
+          <VBox fx:id="rightPanel" styleClass="background" minWidth="0.0">
             <padding>
               <Insets top="10" right="10" bottom="10" left="10" />
             </padding>
 
             <StackPane fx:id="personListPanelPlaceholder"
                        VBox.vgrow="ALWAYS"
+                       minWidth="0"
                        styleClass="person-list-host" />
           </VBox>
-        </HBox>
+          </items>
+        </SplitPane>
 
         <StackPane fx:id="commandBoxPlaceholder" VBox.vgrow="NEVER">
           <VBox.margin>
-            <Insets top="0" right="10" bottom="10" left="10" />
+            <Insets top="10" right="10" bottom="10" left="10" />
           </VBox.margin>
           <padding>
             <Insets top="0" right="0" bottom="0" left="0" />
