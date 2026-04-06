@@ -190,6 +190,67 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 ---
 
+## **Implementation**
+
+This section describes some noteworthy details on how certain features are implemented.
+
+### Setup Password Implementation
+
+The current setup feature allows users to configure a secure password for their vault. Setting up a valid password is mandatory to ensure the privacy of the Unlocked mode. The setup mechanism switches the user interface to a dedicated view via `SetupPanel`.
+
+The setup initialization is facilitated by `MainWindow`, `SecurityManager`, and `LogicManager`. It securely delegates the exact UI state change back to the UI context. 
+
+When an operation dictates that the user is required to set a password, the system invokes the `MainWindow#handleSetup()` mechanism. This occurs in two primary ways:
+
+1.  **Initial Launch** — `MainWindow#fillInnerParts()` checks upon startup via `SecurityManager#isAuthenticated()`. If no valid password exists in the save file (such as on the first launch/data corruption), it prevents normal rendering of `MainWindow`.
+2.  **Setup Command** — While in Unlocked mode, the user deliberately enters the `setup` command.
+
+When the `setup` command is executed, `LogicManager` generates an empty `SetupCommand`. It creates and returns a `CommandResult` object with its `showSetup` flag evaluated to `true`. When the `CommandResult` is returned to the `MainWindow`, it checks `isShowSetup() == true`, and switches the active GUI root to the `SetupPanel`. 
+
+Once the user is on the `SetupPanel`, they submit a string password, and the UI triggers the `MainWindow#handlePasswordInput(String)` callback. `SecurityManager` intercepts this, validates it utilizing `PasswordUtil`, and communicates with `LogicManager` to store it via `LogicManager#setAddressBookPassword()` and writes it persistently via `LogicManager#saveAddressBook()`.
+
+The following operations actively facilitate password setup and its view transitions:
+
+*   `SecurityManager#isAuthenticated()` — Validates whether a setup screen should appear.
+*   `CommandResult#isShowSetup()` — Checks if a command actively dictates a transition to the configuration interface.
+*   `MainWindow#handleSetup()` — Triggers the application into rendering its custom `SetupPanel` view.
+*   `SecurityManager#savePassword(String)` — Validates the password and store it persistently in `Storage`.
+
+Given below is an example usage scenario and how the system behaves at each step when initiated via command.
+
+**Step 1.** The user launches the application, successfully enters the Unlocked Mode, and types `setup`.
+
+**Step 2.** The `LogicManager` propagates execution. Since the command identifies correctly, the parser creates a `SetupCommand`. 
+
+**Step 3.** The `SetupCommand` executes. It creates a `CommandResult` instantiated with a `showSetup` flag set to `true`.
+
+**Step 4.** The `MainWindow` retrieves the boolean via `CommandResult#isShowSetup()`. Recognizing it is `true`, it immediately calls `MainWindow#handleSetup()`, which renders the secondary `SetupPanel` directly onto the primary stage.
+
+<box type="info" seamless>
+
+**Note:** If the user fails to input a valid secure string inside the `SetupPanel`, `SecurityManager` throws an exception that `MainWindow` catches, ensuring the user stays restricted inside the `SetupPanel` until a valid one is stored.
+
+</box>
+
+The following sequence diagram shows how an explicit `setup` execution passes through the UI and Logic component:
+
+<puml src="diagrams/SetupSequenceDiagram.puml" alt="Setup Sequence Diagram" />
+
+**Design considerations:**
+
+**Aspect: How a password entry executes:**
+
+*   **Alternative 1 (current choice):** Switches to a dedicated `SetupPanel` view.
+    *   **Pros:** Prominently guides the user through the password setup and ensures the user is not able to interact
+    with the application without going through the critical setup phase.
+    *   **Cons:** Architecture becomes slightly more complex, as the state transition requires propagating an abstract representation of UI intent (`showSetup=true` flags inside `CommandResult`) directly back to the active `MainWindow`.
+
+*   **Alternative 2:** Execute it purely as a one-liner console command like `setup mypassword123`.
+    *   **Pros:** Requires almost no architectural additions inside `UI`, very simple implementation, avoids an entire UI panel creation sequence. 
+    *   **Cons:** Harder to implement mode-based command restrictions as the initial setup will need be executed in Locked mode but password changes should only be done in the Unlocked mode. Furthermore, the setup command could be saved in the `CommandHistory`, potentially revealing the existence of hidden functionalities in Locked mode.
+
+---
+
 ## **Documentation, logging, testing, configuration, dev-ops**
 
 - [Documentation guide](Documentation.md)
