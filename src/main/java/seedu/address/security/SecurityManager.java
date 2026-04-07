@@ -9,8 +9,7 @@ import seedu.address.security.util.PasswordUtil;
 
 /**
  * Manages the security and authentication state of the application.
- * The {@code SecurityManager} handles the lifecycle of application access,
- * including persistent authentication state and password updates.
+ * The {@code SecurityManager} handles the lifecycle of application access.
  * It coordinates between the UI components and the data model via {@code Logic}.
  */
 public class SecurityManager implements Security {
@@ -21,7 +20,6 @@ public class SecurityManager implements Security {
 
     /**
      * Constructs a {@code SecurityManager} with custom dependencies.
-     * This constructor is primarily used for testing or specialized password retrieval.
      *
      * @param logic The logic component.
      */
@@ -30,10 +28,9 @@ public class SecurityManager implements Security {
     }
 
     /**
-     * Checks if the application requires initial password setup.
-     * This logic determines if the user should be forced into the setup view.
+     * Checks if the application has a valid password stored and is ready for use.
      *
-     * @return False if no password exists or the stored password is invalid; true otherwise.
+     * @return True if a valid password exists in storage; false otherwise.
      */
     @Override
     public boolean isAuthenticated() {
@@ -44,29 +41,19 @@ public class SecurityManager implements Security {
             return false;
         }
 
-        if (PasswordUtil.isStrictlyValid(storedPassword)) {
+        if (PasswordUtil.isValidPassword(storedPassword)) {
             return true;
         }
 
-        String trimmed = storedPassword.trim();
-        if (PasswordUtil.isValidPassword(trimmed)) {
-            logger.warning("Whitespace detected in stored password. Repairing data file...");
-            try {
-                savePassword(trimmed);
-                return true;
-            } catch (Exception e) {
-                logger.severe("Auto-repair failed: " + e.getMessage());
-            }
-        }
-
-        logger.warning("Password is unrecoverable. Setup required.");
+        logger.warning("Stored password is invalid or corrupted. Setup required.");
         return false;
     }
 
     /**
-     * Validates and saves the provided raw password to the model via logic.
+     * Validates and saves the provided password to the model via logic.
      *
-     * @param password The plain text password entered by the user.
+     * @param password The plain text password to be saved.
+     * @throws IllegalArgumentException if the password format is invalid.
      */
     @Override
     public void savePassword(String password) {
