@@ -14,6 +14,8 @@ Spyglass is optimized for a **keyboard-centric workflow**. By pairing a high-spe
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div style="page-break-after: always;"></div>
+
 ## About This Guide
 
 This guide is designed for **individuals who require a secure and discreet way to manage contacts without drawing attention from others** in their household. It provides a step-by-step walkthrough for **setting up the application, managing your privacy settings, and using the command-based interface** to keep your data private.
@@ -29,7 +31,7 @@ Before you begin, please take a moment to understand the command format used thr
 * **Whitespaces within parameters** are trimmed and collapsed.
   * Leading and trailing whitespaces are ignored.
   * Multiple consecutive internal whitespaces are replaced with a single space.
-  * *Example:* `-n   John     Doe  ` will be interpreted as `-n John Doe`.
+  * *Example:* `  -n ⠀⠀⠀John ⠀⠀ Doe⠀⠀⠀` will be interpreted as `-n John Doe`.
 * **Space between prefix and parameter is optional.**
   * *Example:* `-nJohn` is equivalent to `-n John`.
 * **Prefixes** precede parameters to identify the specific field:
@@ -42,12 +44,14 @@ Before you begin, please take a moment to understand the command format used thr
 * **Items in square brackets `[]`** are optional.
   * *Example:* `-n NAME [-t TAG]` can be used as `-n John Doe -t friend` or just `-n John Doe`.
 * **Items with** `…` **after them** can be used multiple times, including zero times.
-  * *Example:* `[-t TAG]…` can be used as ` ` (0 times), `-t friend`, `-t friend -t family` etc.
+  * *Example:* `[-t TAG]…` can be used as (0 times), `-t friend`, `-t friend -t family` etc.
 * **Parameters can be in any order.**
   * *Example:* If the command specifies `-n NAME -p PHONE`, then `-p PHONE -n NAME` is also acceptable.
 * **Extraneous parameters** for commands that do not take parameters (such as `list`, `exit` and `clear`) will be ignored.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## Getting Started
 
@@ -83,6 +87,8 @@ Copy the `.jar` file into a folder of your choice (e.g., `Documents/Spyglass`). 
 * **Linux:** Open Terminal and navigate to your folder (e.g., `cd ~/Downloads`).
   * Type `java -jar Spyglass.jar` and press <kbd>Enter</kbd>`.
 
+<div style="page-break-after: always;"></div>
+
 ### 5. Secure your data
 On your first launch, you will be **prompted to set a password**. This password will be **used to access your sensitive contacts**.
 
@@ -103,6 +109,8 @@ Your password cannot be empty, contain spaces or non-standard symbols (emojis, f
 
 ![initial setup with myPassword123](images/initialSetup.png)
 
+<div style="page-break-after: always;"></div>
+
 ### 6. Try a few example commands
 
 Upon launching the application, you should see an interface similar to the one below, pre-populated with some **sample data**. Note that these initial entries are all **public contacts**.
@@ -121,6 +129,8 @@ Refer to the [Features](#features) section below for details on the available co
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div style="page-break-after: always;"></div>
+
 ## User Interface Overview
 ![ui-overview](images/uiOverview.png)
 
@@ -128,8 +138,9 @@ This is the main interface of Spyglass. It consists of:
 
 * **Contact List** — Displays all contacts in your current view.
 * **Contact Details** — Displays contact information in full detail (with email, address etc.) of the currently selected contact.
+  * If the application is in [Unlocked mode](#app-modes-locked-and-unlocked), an additional line is displayed indicating whether it is a public or sensitive contact.
 * **Command Box** — This is where you enter commands to interact with Spyglass. Type your command here and press <kbd>Enter</kbd> to execute it.
-* **Result History** - Displays the list of feedback messages of the commands you entered in the command box.
+* **Result History** — Displays the list of feedback messages of the commands you entered in the command box.
   It stores up to the **most recent 200 entries**.
 
 <box type="tip" seamless>
@@ -144,24 +155,28 @@ This is the main interface of Spyglass. It consists of:
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div style="page-break-after: always;"></div>
+
 
 ## App Modes: Locked and Unlocked
 
 Spyglass operates in two distinct modes to ensure your sensitive data remains protected:
 
-* **Locked Mode**: Displays only **Public** contacts. In this mode, the application window title is **"AddressBook"** to mask its true identity and provide plausible deniability.
-* **Unlocked Mode**: Displays the **full contact list**, including **both Public and Sensitive** entries. The application window title changes to **"Spyglass"** to indicate elevated access.
+* **Locked mode**: Displays only **Public** contacts. In this mode, the application window title is **"AddressBook"** to mask its true identity and provide plausible deniability.
+* **Unlocked mode**: Displays the **full contact list**, including **both Public and Sensitive** entries. The application window title changes to **"Spyglass"** to indicate elevated access.
 
-![Visual identifier for locked / unlocked modes](images/titleChange.png)
+![Visual identifier for Locked / Unlocked modes](images/titleChange.png)
 
 ### Switching Between Modes
 
 * **To Unlock**: Use the [unlock](#unlocking-the-app-unlock) command followed by your password to reveal your hidden contacts.
-* **To Lock**: Use the [lock](#locking-the-app-lock) command to immediately hide sensitive contacts and return the application to its public state.
+* **To Lock**: Use the [lock](#locking-the-app-lock) command to immediately hide sensitive contacts and return the application to public view.
 
-When you launch the app, it starts in **Locked mode** by default. While Unlocked mode provides a unified view of all your data, switching back to Locked mode ensures that only non-sensitive information is visible to onlookers.
+When you launch the app, it starts in **Locked mode** by default, **regardless of which mode was active when it was last closed.** While Unlocked mode provides a unified view of all your data, switching back to Locked mode ensures that only non-sensitive information is visible to onlookers.
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 ## Features
 
@@ -172,22 +187,25 @@ When you launch the app, it starts in **Locked mode** by default. While Unlocked
 
 ### Command Summary
 
-| Action | Format & Examples | Mode Availability |
-|--------|-------------------|-------------------|
-| **Add** | `add -n NAME -p PHONE -e EMAIL -a ADDRESS [-t TAG]…​` <br> e.g., `add -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd` | Any               |
-| **Clear** | `clear` | Any               |
-| **Delete** | `delete INDEX` <br> e.g., `delete 3` | Any               |
-| **Edit** | `edit INDEX [-n NAME] [-p PHONE] [-e EMAIL] [-a ADDRESS] [-t TAG]…​` <br> e.g., `edit 2 -n James Lee` | Any               |
-| **Find** | `find KEYWORD [MORE_KEYWORDS]` <br> e.g., `find James Jake` | Any               |
-| **Help** | `help [COMMAND]` <br> e.g., `help add` | Any               |
-| **List** | `list` | Any               |
-| **View** | `view INDEX` <br> e.g., `view 1` | Any               |
-| **Unlock** | `unlock PASSWORD` <br> e.g., `unlock myPassword123` | Any\*         |
-| **Lock** | `lock` | **Unlocked Only** |
-| **Setup** | `setup` | **Unlocked Only** |
-| **Toggle** | `toggle INDEX` <br> e.g., `toggle 1` | **Unlocked Only** |
+| Action     | Format & Examples                                                                                                                        | Mode Availability |
+|------------|------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| **Add**    | `add -n NAME -p PHONE -e EMAIL -a ADDRESS [-t TAG]…​` <br> e.g., `add -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd` | Any               |
+| **Clear**  | `clear`                                                                                                                                  | Any               |
+| **Delete** | `delete INDEX` <br> e.g., `delete 3`                                                                                                     | Any               |
+| **Edit**   | `edit INDEX [-n NAME] [-p PHONE] [-e EMAIL] [-a ADDRESS] [-t TAG]…​` <br> e.g., `edit 2 -n James Lee`                                    | Any               |
+| **Find**   | `find KEYWORD [MORE_KEYWORDS]` <br> e.g., `find James Jake`                                                                              | Any               |
+| **Help**   | `help [COMMAND]` <br> e.g., `help add`                                                                                                   | Any               |
+| **List**   | `list`                                                                                                                                   | Any               |
+| **View**   | `view INDEX` <br> e.g., `view 1`                                                                                                         | Any               |
+| **Exit**   | `exit`                                                                                                                | Any               |
+| **Unlock** | `unlock PASSWORD` <br> e.g., `unlock myPassword123`                                                                                      | Any\*         |
+| **Lock**   | `lock`                                                                                                                                   | **Unlocked Only** |
+| **Setup**  | `setup`                                                                                                                                  | **Unlocked Only** |
+| **Toggle** | `toggle INDEX` <br> e.g., `toggle 1`                                                                                                     | **Unlocked Only** |
 
 _\*The unlock command is primarily **intended for use in Locked mode**. If executed in **Unlocked mode**, Spyglass will **display a message indicating that the application is already unlocked**._
+
+<div style="page-break-after: always;"></div>
 
 ### Unrestricted Commands
 
@@ -197,7 +215,7 @@ Unrestricted commands are the basic commands of Spyglass that are **available in
 
 </box>
 
-#### Viewing help : `help`
+#### Viewing help : **`help`**
 
 Shows a **concise command manual** in the command history panel. If `COMMAND` is provided, Spyglass shows **help for that specific command**. Otherwise, it shows the **general help overview of the commands available in the current app mode**.
 
@@ -209,12 +227,14 @@ Format: `help [COMMAND]`
 
 </box>
 
-**Examples**
+**Examples:**
 * `help`
 * `help add`
 * `help edit`
 
 ![result for help](images/helpResult.png)
+
+<div style="page-break-after: always;"></div>
 
 #### Adding a person: **`add`**
 
@@ -235,14 +255,14 @@ Adds a person to the address book.
 
 ##### Duplicate handling
 
-* SpyGlass treats two contacts as duplicates only if they have the **same phone number** and the **same name, ignoring case**.
+* Spyglass treats two contacts as duplicates only if they have the **same phone number** and the **same name, ignoring case**.
 * In **Unlocked mode:**
-  * if the new contact duplicates any existing contact, SpyGlass shows a duplicate-contact error and does **not** add the new contact.
+  * If the new contact duplicates any existing contact, Spyglass shows a duplicate-contact error and does **not** add the new contact.
 * In **Locked mode:**
-  * If the new contact duplicates a hidden **Sensitive** contact from Unlocked mode, SpyGlass overrides that hidden **Sensitive** contact instead of rejecting the command.
-  * If the new contact duplicates an existing **Public** contact, SpyGlass shows a duplicate-contact error and does **not** add the new contact.
+  * If the new contact duplicates a hidden **Sensitive** contact from Unlocked mode, Spyglass overrides that hidden **Sensitive** contact instead of rejecting the command.
+  * If the new contact duplicates an existing **Public** contact, Spyglass shows a duplicate-contact error and does **not** add the new contact.
 
-Example:
+**Examples:**
 * If you see a contact named `Kevin` in the current contact list with phone number `29842040`:
   * `add -n KEVIN -p 29842040 -e kevin2@example.com -a 456 Street` will be **rejected** as a duplicate because **both the phone number and the name (ignoring case) match**.
   * `add -n KEVIN -p 2234 -e kevin2@example.com -a 456 Street` will be **allowed** because the **phone number is different**.
@@ -267,8 +287,12 @@ Prefix parsing behavior with `-` prefixes (`-n`, `-p`, `-e`, `-a`, `-t`):
 * This means values containing words that start with one of these patterns (after a space) may be split unexpectedly.
 * Example: `-a Block -n 12` is parsed as address `Block` and then a new name prefix `-n`.
 
-Special-character input tips:
-* For names, replace punctuation with spaces: `O'Neil` -> `O Neil`, `Anne-Marie` -> `Anne Marie`.
+</box>
+
+<box type="tip" seamless>
+
+**Special-character input tips**:
+* For names, replace punctuation with spaces, and special characters with their corresponding alphabets: `O'Neil` -> `O Neil`, `Anne-Marie` -> `Anne Marie`, `Beyoncé` -> `Beyonce`.
 * For tags, remove symbols and separators: `high-priority` -> `highpriority`, `team_a` -> `teama`.
 * For values that must contain a hyphenated token beginning with a reserved prefix (e.g. `-n...`), rephrase to avoid starting that token with `-n`, `-p`, `-e`, `-a`, or `-t` after a space.
 
@@ -280,13 +304,17 @@ Special-character input tips:
 
 ![result for add](images/addResult.png)
 
+<div style="page-break-after: always;"></div>
+
 #### Listing all persons: **`list`**
 
-Shows a list of all persons in the address book.
+Shows a list of all persons in the address book under the current mode.
 
 **Format:** `list`
 
 ![result for list](images/listResult.png)
+
+<div style="page-break-after: always;"></div>
 
 #### Editing a person: **`edit`**
 
@@ -311,7 +339,7 @@ If a value includes special characters that are rejected, normalize it first (fo
 
 <box type="info" seamless>
 
-**Note:** All edited fields must conform to the same [Parameter Constraints](#parameter-constraints) specified in the [`add`](#adding-a-person-add) command. [Duplicate handling](#duplicate-handling) for `edit` also follows the same rules as [`add`](#adding-a-person-add).
+**Note:** All edited fields must conform to the same [Parameter Constraints](#parameter-constraints) specified in the `add` command. [Duplicate handling](#duplicate-handling) for `edit` also follows the same rules as `add`.
 
 </box>
 
@@ -320,6 +348,8 @@ If a value includes special characters that are rejected, normalize it first (fo
 * `edit 2 -n Betsy Crower -t ` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
 ![result for 'edit](images/editResult.png)
+
+<div style="page-break-after: always;"></div>
 
 #### Locating persons by attributes: **`find`**
 
@@ -330,7 +360,7 @@ Finds persons whose attributes (name, phone, email, address or tags) contain any
 * The search is **case-insensitive**. e.g., `hans` will match `Hans`.
 * The **order of the keywords does not matter**. e.g., `Hans 91234567` will match a person named Hans or a person with that phone number.
 * **All fields are searched**: Name, Phone, Email, Address, and Tags.
-* **Keyword Matching (Full Words Only):** * For **Name, Phone, Address, and Tags**, keywords must match full words separated by whitespace. e.g., `find 9123` will **not** match `91234567`.
+* **Keyword Matching (Full Words Only):** For **Name, Phone, Address, and Tags**, keywords must match full words separated by whitespace. e.g., `find 9123` will **not** match `91234567`.
   * For **Email**, keywords match against the full email string OR segments separated by `@` e.g., `find bob@gmail.com`, `find gmail.com` and `find bob` will match `bob@gmail.com`.
 * Persons matching **at least one** keyword will be returned (i.e., `OR` search). e.g., `find Hans friends` will return all persons named `Hans` as well as any person with the `friends` tag.
 
@@ -341,6 +371,8 @@ Finds persons whose attributes (name, phone, email, address or tags) contain any
 * `find Alex 92624417 serangoon` returns `Alex Yeoh`, `Roy Balakrishnan` with phone number `92624417`, and `David Li` and `Bernice Yu` who have `Serangoon` in their address <br>
 
 ![result for 'find Alex 92624417 serangoon'](images/findResult.png)
+
+<div style="page-break-after: always;"></div>
 
 #### Viewing a contact: **`view`**
 
@@ -363,6 +395,8 @@ Displays detailed information for a specific contact by selecting them using the
 
 ![result for 'view 2'](images/viewResult.png)
 
+<div style="page-break-after: always;"></div>
+
 #### Deleting a person: **`delete`**
 
 Deletes the specified person from the address book.
@@ -378,6 +412,8 @@ Deletes the specified person from the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 
 ![result for 'delete'](images/deleteResult.png)
+
+<div style="page-break-after: always;"></div>
 
 #### Clearing all entries: **`clear`**
 
@@ -403,6 +439,8 @@ Exits the program.
 
 **Format:** `exit`
 
+<div style="page-break-after: always;"></div>
+
 ### Restricted Commands
 
 <box type="info" icon=":fa-solid-user-secret:" seamless>
@@ -427,6 +465,8 @@ Switches the application to **Locked mode**, hiding all sensitive entries and di
 
 ![result for 'lock'](images/lockResult.png)
 
+<div style="page-break-after: always;"></div>
+
 #### Unlocking the app: **`unlock`**
 
 Switches the application to **Unlocked mode** or provides status feedback depending on the current state.
@@ -439,7 +479,7 @@ Switches the application to **Unlocked mode** or provides status feedback depend
 * **Password Requirements:**
   * You **must** provide the correct password configured during the setup process.
   * The password is **case-sensitive** (e.g., `MyPassword123` is different from `mypassword123`).
-* If the password is **incorrect** while the app is in Locked mode, an `Unknown Command.` will be shown, and the **app remains in locked mode**.
+* If the password is **incorrect** while the app is in Locked mode, an `Unknown command` will be shown, and the **app remains in Locked mode**.
 
 <box type="info" seamless>
 
@@ -450,6 +490,8 @@ Switches the application to **Unlocked mode** or provides status feedback depend
 * `unlock myPassword123` : Unlocks the app and reveals the full contact list.
 
 ![result for 'unlock'](images/unlockResult.png)
+
+<div style="page-break-after: always;"></div>
 
 #### Reconfiguring password: **`setup`**
 
@@ -470,6 +512,8 @@ Brings you to the initial configuration page to update your password.
 
 ![success message for 'setup'](images/setupSuccess.png)
 
+<div style="page-break-after: always;"></div>
+
 #### Toggling a contact status: **`toggle`**
 
 Toggles the specified contact between **Public** and **Sensitive** status.
@@ -489,23 +533,17 @@ Toggles the specified contact between **Public** and **Sensitive** status.
 
 ![result for 'toggle'](images/toggleResult.png)
 
+<div style="page-break-after: always;"></div>
+
 ### Saving the data
 
 Spyglass data are saved in the hard disk **automatically** after any command that changes the data. There is **no need** to save manually.
 
 ### Editing the data file
 
-Spyglass data for unlocked and locked modes are saved automatically as a JSON file **`[JAR file location]/data/addressbook.json`**. Advanced users are welcome to update data directly by editing that data file.
+Spyglass data for Unlocked and Locked modes are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
 The file stores the **contact data at the top**, followed by your **password**.
-
-<box type="warning" seamless>
-
-**Caution:**
-* The password is stored in plaintext in the local data file (no file encryption).
-* This project assumes the app is used in a secure environment (for example, a personal device that is already protected by OS/login controls). Therefore, data-file encryption is intentionally not used
-
-</box>
 
 <box type="warning" seamless>
 
@@ -524,9 +562,11 @@ As certain edits can cause Spyglass to behave in unexpected ways, it is **highly
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous Spyglass home folder.
 
 **Q**: What happens if I forget my password?<br>
-**A**: You can reset your password by manually editing the **`preferences.json`** file. If you are unable to do so, you can delete the file to restart the application; however, this will permanently delete all your saved contacts.
+**A**: You can reset your password by manually editing the `addressbook.json` file. If you are unable to do so, you can delete the file to restart the application; however, this will permanently delete all your saved contacts.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## Known issues
 
@@ -542,7 +582,14 @@ As certain edits can cause Spyglass to behave in unexpected ways, it is **highly
    ![Tag Overflow in Contact List](images/tagOverflow.png)
 
   * **Remedy:** Avoid using excessively long tags (smaller than 50 characters).
+
+4. **Result history auto-scroll limitation:** In the Result History, if a line is only partially visible at the bottom of the window, the scroll bar may fail to automatically scroll down to reveal the full output.
+   ![Result History Scroll Issue](images/scrollResultHistory.png)
+
+* **Remedy:** The auto-scroll will function normally starting from the next command. Alternatively, the user can manually scroll down to view the rest of the message.
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## Glossary
 
