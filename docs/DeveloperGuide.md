@@ -107,10 +107,10 @@ The `Security` component is responsible for the application's **integrity check*
 - **Startup Logic:** Returns a boolean value indicating whether the application should **transition** to the initial Setup Panel.
 - **Password Setup:** **Validates** the user's plain-text input using `PasswordUtil` and **delegates** to the `Logic` component to persist the password state in local storage.
 
-Current security scope for password handling:
-- Password input is plain text at entry time (setup field and `unlock PASSWORD` command input are not masked).
-- The password is stored as plaintext in the local JSON data file (no hashing/encryption in current scope).
-- This aligns with project assumptions that Spyglass is used in a secure local environment.
+**Assumptions and constraints**:
+- Spyglass assumes a trusted local environment, such as a user-managed device already protected by OS-level access controls.
+- Password setup and unlock are intended only when the user judges the surrounding environment to be safe from observation, hence, password input is plain text at entry time and is not masked.
+- The password is stored as plaintext in the local JSON data file by design, and data-file encryption is intentionally out of scope.
 
 The sequence diagram below illustrates the interactions during the startup phase, showing how the `Security` component determines the initial UI state.
 
@@ -813,10 +813,6 @@ follows the same pipeline with `UnlockCommandParser`.
 1. In locked mode, the window title should **not reveal** Spyglass branding or other sensitive clues.
 2. Restricted commands should **not leak** the hidden mode through visible UI feedback.
 3. Contact data should remain **local to the device** and should **not depend** on network access.
-4. Spyglass assumes operation on a trusted local environment (for example, a user-managed device already protected by OS-level access controls).
-5. Password setup and unlock are designed for use only when the user judges the surrounding environment to be
-safe from observation. Password input is not masked, and shoulder-surfing protection is not provided.
-6. Stored data remains human-readable plaintext JSON, including the password. Data-file encryption is intentionally out of scope and not implemented, in line with the project constraints.
 
 #### Reliability and Data Handling
 
