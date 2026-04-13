@@ -26,7 +26,12 @@ Before you begin, please take a moment to understand the command format used thr
 
 * **Words in** `UPPER_CASE` are parameters to be supplied by you.
   * *Example:* In `add -n NAME`, `NAME` is a parameter which can be used as `add -n John Doe`.
-* **Items in square brackets** `[]` are optional.
+* **Whitespaces within parameters** are trimmed and collapsed.
+  * Leading and trailing whitespaces are ignored.
+  * Multiple consecutive internal whitespaces are replaced with a single space.
+  * *Example:* `-n   John     Doe  ` will be interpreted as `-n John Doe`.
+* **Space between prefix and parameter is optional.**
+  * *Example:* `-nJohn` is equivalent to `-n John`.
 * **Prefixes** precede parameters to identify the specific field:
   * `-n`: Name
   * `-p`: Phone
@@ -40,10 +45,6 @@ Before you begin, please take a moment to understand the command format used thr
   * *Example:* `[-t TAG]…` can be used as ` ` (0 times), `-t friend`, `-t friend -t family` etc.
 * **Parameters can be in any order.**
   * *Example:* If the command specifies `-n NAME -p PHONE`, then `-p PHONE -n NAME` is also acceptable.
-* **All parameter whitespace is trimmed.**
-  * *Example:* `-n  John Doe  ` will be treated as `-n John Doe`, with leading and trailing spaces removed.
-* **Space between prefix and parameter is optional.**
-  * *Example:* `-nJohn` is equivalent to `-n John`.
 * **Extraneous parameters** for commands that do not take parameters (such as `list`, `exit` and `clear`) will be ignored.
 
 ---
@@ -95,14 +96,8 @@ Complete the initial setup in a **private environment**. Since you are prompted 
 For the examples in the rest of this guide, we will assume you have set your password as `myPassword123`.
 
 <box type="info" seamless>
+
 Your password cannot be empty, contain spaces or non-standard symbols (emojis, foreign language characters).
-
-</box>
-
-<box type="warning" seamless>
-
-**Caution:**
-Password entry is currently visible while typing (not masked). Perform password setup only in a trusted environment where your screen and keyboard input cannot be observed.
 
 </box>
 

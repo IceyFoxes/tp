@@ -126,6 +126,23 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseAddress_validValueWithInternalWhitespace_returnsSpaceCollapsedAddress() throws Exception {
+        String addressWithInternalSpaces = "123    Main    Street #0505";
+        Address expectedAddress = new Address(VALID_ADDRESS);
+        assertEquals(expectedAddress, ParserUtil.parseAddress(addressWithInternalSpaces));
+
+        String addressWithMixedWhitespace = "123" + WHITESPACE + "Main" + WHITESPACE + "Street #0505";
+        assertEquals(expectedAddress, ParserUtil.parseAddress(addressWithMixedWhitespace));
+    }
+
+    @Test
+    public void parseAddress_validValueWithLeadingTrailingAndInternalWhitespace_returnsCleanAddress() throws Exception {
+        String messyAddress = WHITESPACE + "123" + WHITESPACE + WHITESPACE + "Main Street #0505" + WHITESPACE;
+        Address expectedAddress = new Address(VALID_ADDRESS);
+        assertEquals(expectedAddress, ParserUtil.parseAddress(messyAddress));
+    }
+
+    @Test
     public void parseEmail_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parseEmail((String) null));
     }
@@ -192,5 +209,22 @@ public class ParserUtilTest {
         Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseName_validValueWithInternalWhitespace_returnsSpaceCollapsedName() throws Exception {
+        String nameWithInternalSpaces = "Rachel    Walker";
+        Name expectedName = new Name(VALID_NAME);
+        assertEquals(expectedName, ParserUtil.parseName(nameWithInternalSpaces));
+
+        String nameWithMixedWhitespace = "Rachel" + WHITESPACE + "Walker";
+        assertEquals(expectedName, ParserUtil.parseName(nameWithMixedWhitespace));
+    }
+
+    @Test
+    public void parseName_validValueWithLeadingTrailingAndInternalWhitespace_returnsCleanName() throws Exception {
+        String messyName = WHITESPACE + "Rachel" + WHITESPACE + WHITESPACE + "Walker" + WHITESPACE;
+        Name expectedName = new Name(VALID_NAME);
+        assertEquals(expectedName, ParserUtil.parseName(messyName));
     }
 }
