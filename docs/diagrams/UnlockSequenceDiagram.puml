@@ -21,7 +21,7 @@ end box
 activate LogicManager
 
 ref over LogicManager
-Generic parse-and-route pipeline (shared)
+Parse and route unlock command
 end ref
 
 create CommandContext
