@@ -136,8 +136,12 @@ Here is a partial class diagram of the `Logic` component:
 
 <puml src="diagrams/LogicClassDiagram.puml" width="650"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component for
-`execute("delete 1")`, assuming the provided index is valid.
+The parsing sub-sequence for `execute("delete 1")` is shown below:
+
+<puml src="diagrams/DeleteParseSequenceDiagram.puml" alt="Parsing and routing flow for the delete command" />
+
+The execution-focused sequence diagram below illustrates the interactions within the `Logic`
+component for `execute("delete 1")`, assuming the provided index is valid.
 
 <puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions inside the Logic component for the delete command" />
 
@@ -399,6 +403,11 @@ If `unlock` is executed while the app is **already unlocked**, it **throws** a s
 "already unlocked" message instead.
 
 The sequence diagram below shows the successful unlock path and the incorrect-password path:
+
+Parsing and command routing details are intentionally omitted here. Refer to the
+[Logic component](#logic-component) section for the shared parsing pipeline.
+The parsing sub-sequence shown for `delete` is a representative example; `unlock`
+follows the same pipeline with `UnlockCommandParser`.
 
 <puml src="diagrams/UnlockSequenceDiagram.puml" width="900" />
 

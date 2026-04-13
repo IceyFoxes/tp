@@ -32,6 +32,10 @@ Before you begin, please take a moment to understand the command format used thr
   * *Example:* `[-t TAG]…` can be used as ` ` (0 times), `-t friend`, `-t friend -t family` etc.
 * **Parameters can be in any order.**
   * *Example:* If the command specifies `-n NAME -p PHONE`, then `-p PHONE -n NAME` is also acceptable.
+* **All parameter whitespace is trimmed.**
+  * *Example:* `-n  John Doe  ` will be treated as `-n John Doe`, with leading and trailing spaces removed.
+* **Space between prefix and parameter is optional.**
+  * *Example:* `-nJohn` is equivalent to `-n John`.
 * **Extraneous parameters** for commands that do not take parameters (such as `list`, `exit` and `clear`) will be ignored.
 
 ---
@@ -221,6 +225,7 @@ Adds a person to the address book.
 * Emails should be of the format `local-part@domain` and must satisfy **all** of the following constraints:
   * The local-part should **only** contain alphanumeric characters and these special characters: `+`, `_`, `.`, `-`.
   * The local-part **must not** start or end with a special character.
+  * No consecutive special characters are allowed.
   * The domain name **must** be made up of domain labels separated by periods.
   * The domain name **must** end with a domain label that is at least **2 characters long**.
   * Each domain label **must** start and end with an alphanumeric character.
