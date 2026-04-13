@@ -40,6 +40,10 @@ Before you begin, please take a moment to understand the command format used thr
   * *Example:* `[-t TAG]…` can be used as ` ` (0 times), `-t friend`, `-t friend -t family` etc.
 * **Parameters can be in any order.**
   * *Example:* If the command specifies `-n NAME -p PHONE`, then `-p PHONE -n NAME` is also acceptable.
+* **All parameter whitespace is trimmed.**
+  * *Example:* `-n  John Doe  ` will be treated as `-n John Doe`, with leading and trailing spaces removed.
+* **Space between prefix and parameter is optional.**
+  * *Example:* `-nJohn` is equivalent to `-n John`.
 * **Extraneous parameters** for commands that do not take parameters (such as `list`, `exit` and `clear`) will be ignored.
 
 ---
@@ -83,7 +87,7 @@ On your first launch, you will be **prompted to set a password**. This password 
 
 <box type="warning" seamless>
 
-**Caution:** 
+**Caution:**
 Complete the initial setup in a **private environment**. Since you are prompted to set a password immediately upon launch, performing this step in view of others may draw unwanted attention or suspicion toward the application's true purpose.
 
 </box>
@@ -227,7 +231,7 @@ Adds a person to the address book.
 </box>
 
 * After a successful add, Spyglass **highlights** the newly added contact.
-* Mode-specific status: 
+* Mode-specific status:
   * Contacts added in **Unlocked mode** are set to **Sensitive** by default.
   * Contacts added in **Locked mode** are set to **Public** by default.
   * To change a contact's status after adding, refer to the [toggle](#toggling-a-contact-status-toggle) command.
