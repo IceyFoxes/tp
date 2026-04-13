@@ -407,7 +407,7 @@ unknown-command `CommandException` instead of revealing password failure explici
 If `unlock` is executed while the app is **already unlocked**, it **throws** a specific
 "already unlocked" message instead.
 
-The parsing sub-sequence for `execute("unlock p/secret")` is shown below:
+The parsing sub-sequence for `execute("unlock myPassword123")` is shown below:
 
 <puml src="diagrams/UnlockParseSequenceDiagram.puml" alt="Parsing and routing flow for the unlock command" />
 
