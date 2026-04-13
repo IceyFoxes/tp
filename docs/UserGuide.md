@@ -87,7 +87,7 @@ On your first launch, you will be **prompted to set a password**. This password 
 
 <box type="warning" seamless>
 
-**Caution:** 
+**Caution:**
 Complete the initial setup in a **private environment**. Since you are prompted to set a password immediately upon launch, performing this step in view of others may draw unwanted attention or suspicion toward the application's true purpose.
 
 </box>
@@ -231,7 +231,7 @@ Adds a person to the address book.
 </box>
 
 * After a successful add, Spyglass **highlights** the newly added contact.
-* Mode-specific status: 
+* Mode-specific status:
   * Contacts added in **Unlocked mode** are set to **Sensitive** by default.
   * Contacts added in **Locked mode** are set to **Public** by default.
   * To change a contact's status after adding, refer to the [toggle](#toggling-a-contact-status-toggle) command.
