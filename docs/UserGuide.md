@@ -91,8 +91,14 @@ Complete the initial setup in a **private environment**. Since you are prompted 
 For the examples in the rest of this guide, we will assume you have set your password as `myPassword123`.
 
 <box type="info" seamless>
+Your password cannot be empty, contain spaces or non-standard symbols (emojis, foreign language characters).
 
-Your password **cannot be empty, contain spaces or non-standard symbols** (emojis, foreign language characters).
+</box>
+
+<box type="warning" seamless>
+
+**Caution:**
+Password entry is currently visible while typing (not masked). Perform password setup only in a trusted environment where your screen and keyboard input cannot be observed.
 
 </box>
 
@@ -227,27 +233,37 @@ Adds a person to the address book.
   * To change a contact's status after adding, refer to the [toggle](#toggling-a-contact-status-toggle) command.
 * If the new contact duplicates an existing contact, Spyglass **rejects** the command in **Unlocked Mode**. In **Locked mode**, if the duplicate is an existing `Sensitive` contact, Spyglass **overrides** that sensitive contact instead.
 
+**Parameters**
+
+`add` parameters follow the constraints below:
+
+| Parameter | Prefix | Required | Constraints | Parameter Example |
+| --- | --- | --- | --- | --- |
+| Name | `-n` | Yes | Must be non-empty after trimming. Only alphanumeric characters and spaces. No punctuation such as `'`, `-`, `_`, `.`. | `-n Alice Tan` |
+| Phone | `-p` | Yes | Must be non-empty after trimming. Digits only, minimum 3 digits. | `-p 98765432` |
+| Email | `-e` | Yes | Must be non-empty after trimming. Must follow `local-part@domain`. Local-part allows alphanumeric plus `+ _ . -`, but cannot start/end with special characters or have consecutive special characters. Domain labels must start/end with alphanumeric and may contain internal `-`. Final label must be at least 2 characters. | `-e alice_tan+work@example-domain.com` |
+| Address | `-a` | Yes | Must be non-empty after trimming. Any characters are allowed, including `-` and punctuation. | `-a Blk 123, #05-67` |
+| Tag | `-t` | No | If provided, each tag must be alphanumeric only (no spaces or punctuation). Multiple `-t` prefixes are allowed. | `-t friend -t coworker` |
+
+<box type="info" seamless>
+
+Prefix parsing behavior with `-` prefixes (`-n`, `-p`, `-e`, `-a`, `-t`):
+* Any substring like ` -n`, ` -p`, ` -e`, ` -a`, or ` -t` inside a value is treated as a **new prefix**, not plain text.
+* This means values containing words that start with one of these patterns (after a space) may be split unexpectedly.
+* Example: `-a Block -n 12` is parsed as address `Block` and then a new name prefix `-n`.
+
+Special-character input tips:
+* For names, replace punctuation with spaces: `O'Neil` -> `O Neil`, `Anne-Marie` -> `Anne Marie`.
+* For tags, remove symbols and separators: `high-priority` -> `highpriority`, `team_a` -> `teama`.
+* For values that must contain a hyphenated token beginning with a reserved prefix (e.g. `-n...`), rephrase to avoid starting that token with `-n`, `-p`, `-e`, `-a`, or `-t` after a space.
+
+</box>
+
 **Examples:**
 * `add -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01`
 * `add -n Betsy Crowe -t friend -e betsycrowe@example.com -a Newgate Prison -p 1234567 -t criminal`
 
 ![result for add](images/addResult.png)
-
-<box type="info" seamless>
-
-* **None** of the required fields (`NAME`, `PHONE_NUMBER`, `EMAIL`, and `ADDRESS`) may be left blank.
-* Names should **only** contain alphanumeric characters and spaces.
-* Phone numbers should contain **only digits** and be at least **3 digits long**.
-* Tags should **only** contain alphanumeric characters.
-* Emails should be of the format `local-part@domain` and must satisfy **all** of the following constraints:
-  * The local-part should **only** contain alphanumeric characters and these special characters: `+`, `_`, `.`, `-`.
-  * The local-part **must not** start or end with a special character.
-  * The domain name **must** be made up of domain labels separated by periods.
-  * The domain name **must** end with a domain label that is at least **2 characters long**.
-  * Each domain label **must** start and end with an alphanumeric character.
-  * Each domain label may contain hyphens, but **only** between alphanumeric characters.
-
-</box>
 
 #### Listing all persons: **`list`**
 
@@ -262,6 +278,13 @@ Shows a list of all persons in the address book.
 Edits an existing person in the address book.
 
 **Format:** `edit INDEX [-n NAME] [-p PHONE] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`
+
+<box type="tip" seamless>
+
+**Tip:** Edited values use the same constraints and `-` prefix parsing behavior as `add`.
+If a value includes special characters that are rejected, normalize it first (for example, `O'Neil` -> `O Neil`).
+
+</box>
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * **At least one** of the optional fields must be provided.
@@ -460,6 +483,14 @@ Spyglass data are saved in the hard disk **automatically** after any command tha
 Spyglass data for unlocked and locked modes are saved automatically as a JSON file **`[JAR file location]/data/addressbook.json`**. Advanced users are welcome to update data directly by editing that data file.
 
 The file stores the **contact data at the top**, followed by your **password**.
+
+<box type="warning" seamless>
+
+**Caution:**
+* The password is stored in plaintext in the local data file (no file encryption).
+* This project assumes the app is used in a secure environment (for example, a personal device that is already protected by OS/login controls). Therefore, data-file encryption is intentionally not used
+
+</box>
 
 <box type="warning" seamless>
 
