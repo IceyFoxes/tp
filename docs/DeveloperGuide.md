@@ -105,7 +105,12 @@ The `Security` component is responsible for the application's **integrity check*
 
 - **Integrity Check:** Verifies if the `password` field in the storage file is **present** and contains **valid characters** via `isAuthenticated()`.
 - **Startup Logic:** Returns a boolean value indicating whether the application should **transition** to the initial Setup Panel.
-- **Password Setup:** **Validates** the user's plain-text input using `PasswordUtil` and **delegates** to the `Logic` component to **securely save** the password state.
+- **Password Setup:** **Validates** the user's plain-text input using `PasswordUtil` and **delegates** to the `Logic` component to persist the password state in local storage.
+
+Current security scope for password handling:
+- Password input is plain text at entry time (setup field and `unlock PASSWORD` command input are not masked).
+- The password is stored as plaintext in the local JSON data file (no hashing/encryption in current scope).
+- This aligns with project assumptions that Spyglass is used in a secure local environment.
 
 The sequence diagram below illustrates the interactions during the startup phase, showing how the `Security` component determines the initial UI state.
 
@@ -336,13 +341,13 @@ The following state diagram summarizes the two application modes and their visib
 
 A few implementation details are worth noting:
 
-- The current mode is **stored centrally** in `AppModeManager`, not inside individual commands.
+- The current mode is **stored centrally** in `AppModeManager`.
 - `LockCommand` and `UnlockCommand` **do not directly mutate** global application state.
   They only **return** a `CommandResult` that requests a mode transition.
 - `LogicManager` is **responsible** for applying the mode transition and refreshing the filtered list.
 - `ModelManager` **maintains two filtered views** over the same combined person list:
   one for locked mode and one for unlocked mode.
-- In locked mode, **only persons** with `PersonStatus.LOCKED` are visible.
+- While in locked mode, the contact list is filtered to **display only public contacts** with the `PersonStatus.PUBLIC` enum attribute.
   In unlocked mode, the filtered list can **show the full combined list**.
 - A successful mode switch is **still followed by** `Storage#saveAddressBook(...)`,
   because `LogicManager` **persists** the address book after every command that completes without
@@ -756,7 +761,7 @@ follows the same pipeline with `UnlockCommandParser`.
 
 1. User enters the **`setup`** command.
 2. Spyglass **switches** the UI to the password setup screen.
-3. User **enters** a new password and confirms it.
+3. User **enters** a new password.
 4. Spyglass **stores** the new password and **returns** to the main interface.
 
    Use case ends.
@@ -808,6 +813,10 @@ follows the same pipeline with `UnlockCommandParser`.
 1. In locked mode, the window title should **not reveal** Spyglass branding or other sensitive clues.
 2. Restricted commands should **not leak** the hidden mode through visible UI feedback.
 3. Contact data should remain **local to the device** and should **not depend** on network access.
+4. Spyglass assumes operation on a trusted local environment (for example, a user-managed device already protected by OS-level access controls).
+5. Password setup and unlock are designed for use only when the user judges the surrounding environment to be
+safe from observation. Password input is not masked, and shoulder-surfing protection is not provided.
+6. Stored data remains human-readable plaintext JSON, including the password. Data-file encryption is intentionally out of scope and not implemented, in line with the project constraints.
 
 #### Reliability and Data Handling
 
@@ -864,8 +873,8 @@ Given below are instructions to test Spyglass manually.
 ### Launch and Password Setup
 
 1. **Initial launch and setup**
-    1. Download the `spyglass.jar` file and copy it into an empty folder.
-    2. Open a terminal and run `java -jar spyglass.jar`.
+    1. Download the `Spyglass.jar` file and copy it into an empty folder.
+    2. Open a terminal and run `java -jar Spyglass.jar`.
     3. **Expected:** A **Password Setup** screen appears. The main interface is not accessible.
     4. Enter a secure password (e.g., `secure123`) and confirm it.
     5. **Expected:** The app transitions to the main GUI in **Locked mode**. Window title displays `AddressBook`. Sample public contacts are visible.
@@ -879,7 +888,7 @@ Given below are instructions to test Spyglass manually.
 3. **Persistence of Locked State on Re-launch**
     1. Prerequisites: App is in **Unlocked mode**.
     2. Exit the application using the `exit` command.
-    3. Re-launch the app using `java -jar spyglass.jar`.
+    3. Re-launch the app using `java -jar Spyglass.jar`.
     4. **Expected:** The app starts in **Locked mode** regardless of the exit state. Window title displays `AddressBook`.
 
 4. **Reconfiguring Password via Setup Command**
@@ -903,7 +912,7 @@ Given below are instructions to test Spyglass manually.
     1. Prerequisites: App is in **Locked mode**.
     2. Test case: `unlock wrongPassword`
     3. **Expected:** The window title remains `AddressBook`. No sensitive data is revealed.
-       <br>Output: `Unknown Command`
+       <br>Output: `Unknown command`
 
 3. **Locking the app**
     1. Prerequisites: App is in **Unlocked mode**.
@@ -929,7 +938,6 @@ Given below are instructions to test Spyglass manually.
     2. Test case: `add -n John Doe -p 98765432 -e john@example.com -a 123 Main St`
     3. **Expected:** Contact is added. Visible in both Locked and Unlocked modes.
        <br>Output: `New person added: John Doe; Phone: 98765432; Email: john@example.com; Address: 123 Main St; Tags: `
-       <br>John Public has been added to the address book!
 
 2. **Adding a sensitive contact**
     1. Prerequisites: App is in **Unlocked mode**.
@@ -1046,7 +1054,7 @@ Given below are instructions to test Spyglass manually.
     3. **Expected:** The help window does **not** list `unlock`, `lock`, `setup` or `toggle`.
     4. Test case: Type `unlock` into the command box.
     5. **Expected:** No suggestions for the existence of `unlock` command appear.
-       <br>Output: `Unknown Command`
+       <br>Output: `Unknown command`
 
 ### Saving Data
 
