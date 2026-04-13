@@ -804,6 +804,7 @@ The sequence diagram below shows the successful unlock path and the incorrect-pa
 
 1. The application should **preserve data** across restarts and **recover cleanly** from invalid or corrupted stored data.
 2. Saved data should remain **human-readable** and be **validated** before it is loaded.
+3. Very long individual tags may overflow UI components and may not be displayed fully.
 
 #### Accessibility
 

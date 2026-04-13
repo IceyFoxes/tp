@@ -218,6 +218,7 @@ Adds a person to the address book.
 * Names should **only** contain alphanumeric characters and spaces.
 * Phone numbers should contain **only digits** and be at least **3 digits long**.
 * Tags should **only** contain alphanumeric characters.
+* Very long individual tags may overflow UI components and may not be displayed fully.
 * Emails should be of the format `local-part@domain` and must satisfy **all** of the following constraints:
   * The local-part should **only** contain alphanumeric characters and these special characters: `+`, `_`, `.`, `-`.
   * The local-part **must not** start or end with a special character.

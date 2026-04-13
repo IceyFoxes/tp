@@ -40,7 +40,7 @@
                        prefHeight="240" />
           </VBox>
 
-          <VBox fx:id="rightPanel" styleClass="background" HBox.hgrow="ALWAYS">
+          <VBox fx:id="rightPanel" styleClass="background" HBox.hgrow="ALWAYS" minWidth="0">
             <padding>
               <Insets top="10" right="10" bottom="10" left="10" />
             </padding>
